@@ -1,0 +1,33 @@
+{
+  "textureAtlas": {
+    "texture": "motw.png",
+    "regionWidth": 52,
+    "regionHeight": 72
+  },
+  "cycles": {
+    "idleSouth": {
+      "frames": [1]
+    },
+    "walkSouth": {
+      "frames": [0,1,2,1]
+    },
+    "walkWest": {
+      "frames": [12,13,14,13]
+    },
+    "walkEast": {
+      "frames": [24,25,26,25]
+    },
+    "walkNorth": {
+      "frames": [36,37,38,37]
+    },
+    "idleWest": {
+      "frames": [13]
+    },
+    "idleEast": {
+      "frames": [25]
+    },
+    "idleNorth": {
+      "frames": [37]
+    }
+  }
+}
