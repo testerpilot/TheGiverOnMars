@@ -2,6 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/TheGiverOnMars
 /.vs/TheGiverOnMars/DesignTimeBuild
 /.vs/TheGiverOnMars/v16
+/TheGiverOnMars/bin
