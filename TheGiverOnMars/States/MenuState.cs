@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 using TheGiverOnMars.Components;
 using TheGiverOnMars.Managers;
 
@@ -12,33 +14,33 @@ namespace TheGiverOnMars.States
     public class MenuState : State
     {
         private List<Component> _components;
+        private GameStateSave saveToLoad = null;
 
-        public MenuState(TheGiverOnMars game, GraphicsDevice graphicsDevice, ContentManager content)
-          : base(game, graphicsDevice, content, Color.IndianRed)
+        public MenuState()
+          : base(Color.IndianRed)
         {
-            var buttonTexture = _content.Load<Texture2D>("Controls/Button");
-            var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
-            UniversalContentManager.InventoryStackFont = buttonFont;
+            var buttonTexture = Constants.Content.Load<Texture2D>("Controls/Button");
+            Constants.InventoryStackFont = Constants.Content.Load<SpriteFont>("Fonts/Font");
 
-            var newGameButton = new Button(buttonTexture, buttonFont)
+            var newGameButton = new Button(buttonTexture, Constants.InventoryStackFont)
             {
-                Position = new Vector2((_game._graphics.PreferredBackBufferWidth / 2) - 100, 200),
+                Position = new Vector2((Constants.Graphics.PreferredBackBufferWidth / 2) - 100, 200),
                 Text = "New Game",
             };
 
             newGameButton.Click += NewGameButton_Click;
 
-            var loadGameButton = new Button(buttonTexture, buttonFont)
+            var loadGameButton = new Button(buttonTexture, Constants.InventoryStackFont)
             {
-                Position = new Vector2((_game._graphics.PreferredBackBufferWidth / 2) - 100, 250),
+                Position = new Vector2((Constants.Graphics.PreferredBackBufferWidth / 2) - 100, 250),
                 Text = "Load Game",
             };
 
             loadGameButton.Click += LoadGameButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont)
+            var quitGameButton = new Button(buttonTexture, Constants.InventoryStackFont)
             {
-                Position = new Vector2((_game._graphics.PreferredBackBufferWidth / 2) - 100, 300),
+                Position = new Vector2((Constants.Graphics.PreferredBackBufferWidth / 2) - 100, 300),
                 Text = "Quit Game",
             };
 
@@ -59,21 +61,24 @@ namespace TheGiverOnMars.States
             foreach (var component in _components)
                 component.Draw(gameTime, spriteBatch);
 
-            _game._sceneManager.Draw(spriteBatch, new Vector2(_game._graphics.PreferredBackBufferWidth / 2, _game._graphics.PreferredBackBufferHeight / 2));
+            Constants.SceneManager.Draw(spriteBatch, new Vector2(Constants.Graphics.PreferredBackBufferWidth / 2, Constants.Graphics.PreferredBackBufferHeight / 2));
 
             spriteBatch.End();
         }
 
         private void LoadGameButton_Click(object sender, EventArgs e)
         {
-            _game._sceneManager.CurrentState = Managers.State.LoadState;
-            _game._sceneManager.CurrentSubstate = Managers.State.Fade;
+            Constants.SceneManager.CurrentState = Managers.State.LoadState;
+            Constants.SceneManager.CurrentSubstate = Managers.State.Fade;
+
+            string json = File.ReadAllText(System.IO.Directory.GetCurrentDirectory() + "/test.sav");
+            saveToLoad = JsonSerializer.Deserialize<GameStateSave>(json);
         }
 
         private void NewGameButton_Click(object sender, EventArgs e)
         {
-            _game._sceneManager.CurrentState = Managers.State.LoadState;
-            _game._sceneManager.CurrentSubstate = Managers.State.Fade;
+            Constants.SceneManager.CurrentState = Managers.State.LoadState;
+            Constants.SceneManager.CurrentSubstate = Managers.State.Fade;
         }
 
         public override void PostUpdate(GameTime gameTime)
@@ -83,21 +88,21 @@ namespace TheGiverOnMars.States
 
         public override void Update(GameTime gameTime)
         {
-            _game._sceneManager.Update(gameTime, _game._spriteBatch, new Vector2(300, 300));
+            Constants.SceneManager.Update(gameTime, Constants.SpriteBatch, new Vector2(300, 300));
 
             foreach (var component in _components)
                 component.Update(gameTime);
 
-            if (_game._sceneManager.CurrentSubstate == Managers.State.Waiting && _game._sceneManager.CurrentState == Managers.State.LoadState)
+            if (Constants.SceneManager.CurrentSubstate == Managers.State.Waiting && Constants.SceneManager.CurrentState == Managers.State.LoadState)
             {
-                _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
-                _game._sceneManager.CurrentSubstate = Managers.State.PlayerLoadDone;
+                Constants.Game.ChangeState(new GameState(saveToLoad));
+                Constants.SceneManager.CurrentSubstate = Managers.State.PlayerLoadDone;
             }
         }
 
         private void QuitGameButton_Click(object sender, EventArgs e)
         {
-            _game.Exit();
+            Constants.Game.Exit();
         }
     }
 }

@@ -69,10 +69,6 @@ namespace TheGiverOnMars.Managers
             Inventory = inventory;
             PlayerTile = playerTile;
 
-            Inventory.Spaces[1] = new StackInventorySpace(new ItemStack(new Items.IronBar(), 10));
-            Inventory.Spaces[4] = new StackInventorySpace(new ItemStack(new Items.IronOre(), 20));
-            Inventory.Spaces[17] = new StackInventorySpace(new ItemStack(new Items.IronOre(), 20));
-
             SetupInventoryTiles(TileManager.GetTileFromID(20));
         }
 
@@ -132,12 +128,12 @@ namespace TheGiverOnMars.Managers
                                 if ((i + (10 * j)) != SelectedTileForMove)
                                 {
                                     stackInvSpace.ItemStack.Item.InventorySprite.Draw(spriteBatch, tilePos, Color.White);
-                                    spriteBatch.DrawString(UniversalContentManager.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), Color.Black);
+                                    spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), Color.Black);
                                 }
                                 else
                                 {
                                     stackInvSpace.ItemStack.Item.InventorySprite.Draw(spriteBatch, tilePos, ColorSelectedItem);
-                                    spriteBatch.DrawString(UniversalContentManager.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), ColorSelectedItemText);
+                                    spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), ColorSelectedItemText);
                                 }
                             }
                         }
@@ -187,12 +183,12 @@ namespace TheGiverOnMars.Managers
                                     if ((i + (10 * j)) != SelectedTileForMove)
                                     {
                                         stackInvSpace.ItemStack.Item.InventorySprite.Draw(spriteBatch, tilePos, Color.White);
-                                        spriteBatch.DrawString(UniversalContentManager.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), Color.Black);
+                                        spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), Color.Black);
                                     }
                                     else
                                     {
                                         stackInvSpace.ItemStack.Item.InventorySprite.Draw(spriteBatch, tilePos, ColorSelectedItem);
-                                        spriteBatch.DrawString(UniversalContentManager.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), ColorSelectedItemText);
+                                        spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(tilePos.X + 45, tilePos.Y + 48), ColorSelectedItemText);
                                     }
                                 }
                             }
@@ -220,7 +216,7 @@ namespace TheGiverOnMars.Managers
                         if (Inventory.Spaces[i].GetType() == typeof(StackInventorySpace))
                         {
                             var stackInvSpace = (StackInventorySpace) Inventory.Spaces[i];
-                            spriteBatch.DrawString(UniversalContentManager.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(TilesOnMainGui[i].Position.X + 45, TilesOnMainGui[i].Position.Y + 48), Color.Black);
+                            spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(TilesOnMainGui[i].Position.X + 45, TilesOnMainGui[i].Position.Y + 48), Color.Black);
                         }
                     }
                 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TheGiverOnMars.Components.Item.Base;
 using TheGiverOnMars.Components.PlacedObject;
 using TheGiverOnMars.Components.PlacedObject.Definitions;
 using TheGiverOnMars.Dictionaries;
@@ -17,9 +18,12 @@ namespace TheGiverOnMars.Objects
         public List<CollisionTile> CollisionRects = new List<CollisionTile>();
         public List<TransitionTile> TransitionTiles = new List<TransitionTile>();
         public List<PlacedObjectInstance> PlacedObjects = new List<PlacedObjectInstance>();
+        public string Name { get; set; }
 
         public Map(MapDictionaryEntry mapData)
         {
+            Name = mapData.MapName;
+
             for (int j = 0; j < mapData.Data.Count; j++)
             {
                 var tileRow = mapData.Data[j];
@@ -66,7 +70,16 @@ namespace TheGiverOnMars.Objects
                 if (placedObject.GetType() == typeof(MapDictionaryEntry.ChestObjectEntry))
                 {
                     var chestData = (MapDictionaryEntry.ChestObjectEntry)placedObject;
-                    instance = new PlacedObjectInstance(new Chest(chestData.Data));
+
+                    if (chestData.Data == null)
+                    {
+                        instance = new PlacedObjectInstance(new Chest(new Inventory(chestData.JsonData).Spaces.ToList()));
+                    }
+                    else
+                    {
+                        instance = new PlacedObjectInstance(new Chest(chestData.Data));
+                    }
+
                     instance.Tile.Position = placedObject.Position * 64;
 
                     PlacedObjects.Add(instance);

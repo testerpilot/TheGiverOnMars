@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
 
@@ -51,12 +52,35 @@ namespace TheGiverOnMars.Components.Item.Base
     public class ItemInstance
     {
         public Item Item { get; set; }
-        public SpriteTile InventorySprite { get; set; }
+
+        private SpriteTile InventorySpritePrivate;
+
+        [JsonIgnore]
+        public SpriteTile InventorySprite
+        {
+            get
+            {
+                if (InventorySpritePrivate == null)
+                {
+                    InventorySpritePrivate = TileManager.GetTileFromID(Item.TileId).DeepCopy(isStaticTile: true);
+                }
+
+                return InventorySpritePrivate;
+            }
+            set
+            {
+                InventorySpritePrivate = value;
+            }
+        }
 
         public ItemInstance(Item item)
         {
             Item = item;
-            InventorySprite = TileManager.GetTileFromID(item.TileId).DeepCopy(isStaticTile: true);
+            InventorySpritePrivate = TileManager.GetTileFromID(item.TileId).DeepCopy(isStaticTile: true);
+        }
+
+        private ItemInstance()
+        { 
         }
     }
 
@@ -75,6 +99,10 @@ namespace TheGiverOnMars.Components.Item.Base
         {
             Item = new ItemInstance(item);
             Count = count;
+        }
+
+        private ItemStack()
+        { 
         }
 
         public void Dispose()

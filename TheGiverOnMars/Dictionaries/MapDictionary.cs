@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using TheGiverOnMars.Components.Item.Base;
 using TheGiverOnMars.Components.Item.Definitions;
 using TheGiverOnMars.Components.PlacedObject;
+using TheGiverOnMars.Components.PlacedObject.Definitions;
 using TheGiverOnMars.Objects;
 
 namespace TheGiverOnMars.Dictionaries
@@ -21,18 +24,60 @@ namespace TheGiverOnMars.Dictionaries
 
         public class PlacedObjectEntry
         {
-            public Vector2 Position;
+            public float PosX { get; set; }
+            public float PosY { get; set; }
+
+            [JsonIgnore]
+            public Vector2 Position
+            {
+                get
+                {
+                    return new Vector2(PosX, PosY);
+                }
+                set
+                {
+                    PosX = value.X;
+                    PosY = value.Y;
+                }
+            }
+
+            public PlacedObjectEntry()
+            {
+            }
         }
 
         public class ChestObjectEntry : PlacedObjectEntry
         {
-            public List<InventorySpace> Data;
+            private List<InventorySpace> DataPrivate { get; set; }
+
+            [JsonIgnore]
+            public List<InventorySpace> Data
+            {
+                get => DataPrivate;
+                set
+                {
+                    DataPrivate = value;
+                    JsonData = DataPrivate.Select(x => x.Serialize()).ToList();
+                }
+            }
+
+            public List<string> JsonData { get; set; }
+
+            public ChestObjectEntry()
+            { 
+            }
+
+            public ChestObjectEntry(Vector2 position, Chest chest)
+            {
+                Data = chest.Inventory.Spaces.ToList();
+                Position = position;
+            }
         }
 
-        public string MapName;
-        public List<int[]> Data = new List<int[]>();
-        public List<MapTransitionEntry> TransitionEntries = new List<MapTransitionEntry>();
-        public List<PlacedObjectEntry> PlacedObjectEntries = new List<PlacedObjectEntry>();
+        public string MapName { get; set; }
+        public List<int[]> Data { get; set; } = new List<int[]>();
+        public List<MapTransitionEntry> TransitionEntries { get; set; } = new List<MapTransitionEntry>();
+        public List<PlacedObjectEntry> PlacedObjectEntries { get; set; } = new List<PlacedObjectEntry>();
 
         public MapDictionaryEntry()
         { 

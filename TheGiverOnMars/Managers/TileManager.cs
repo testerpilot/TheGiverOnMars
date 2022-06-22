@@ -11,21 +11,21 @@ namespace TheGiverOnMars.Managers
     {
         public static Dictionary<int, SpriteTile> TileDict = new Dictionary<int, SpriteTile>();
 
-        public static void LoadTiles(SpriteManager spriteLoader)
+        public static void LoadTiles()
         {
             foreach (var entry in TileNameDictionary.Dictionary)
             {
                 if (entry.HasCollision)
                 {
-                    TileDict.Add(entry.TileID, new CollisionTile(spriteLoader.GetSpriteFromDict(entry.SpriteID)));
+                    TileDict.Add(entry.TileID, new CollisionTile(SpriteManager.GetSpriteFromDict(entry.SpriteID)));
                 }
                 else if (!entry.IsStatic)
                 {
-                    TileDict.Add(entry.TileID, new Tile(spriteLoader.GetSpriteFromDict(entry.SpriteID)));
+                    TileDict.Add(entry.TileID, new Tile(SpriteManager.GetSpriteFromDict(entry.SpriteID)));
                 }
                 else
                 {
-                    TileDict.Add(entry.TileID, new SpriteTile(spriteLoader.GetSpriteFromDict(entry.SpriteID)));
+                    TileDict.Add(entry.TileID, new SpriteTile(SpriteManager.GetSpriteFromDict(entry.SpriteID)));
                 }
             }
         }

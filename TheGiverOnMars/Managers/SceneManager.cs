@@ -22,13 +22,13 @@ namespace TheGiverOnMars.Managers
 
         public string MapToLoad = null;
 
-        public SceneManager(GraphicsDeviceManager graphics)
+        public SceneManager()
         {
-            TransitionColor = new Texture2D(graphics.GraphicsDevice, 1, 1);
+            TransitionColor = new Texture2D(Constants.Graphics.GraphicsDevice, 1, 1);
             TransitionColor.SetData(new Color[] { Color.Black });
 
-            ScreenWidth = graphics.PreferredBackBufferWidth;
-            ScreenHeight = graphics.PreferredBackBufferHeight;
+            ScreenWidth = Constants.Graphics.PreferredBackBufferWidth;
+            ScreenHeight = Constants.Graphics.PreferredBackBufferHeight;
 
             CurrentState = State.None;
             CurrentSubstate = State.None;
@@ -68,6 +68,11 @@ namespace TheGiverOnMars.Managers
             {
                 if (CurrentState == State.LoadMap && MapToLoad != null)
                 {
+                    if (MapManager.CurrentMap != null)
+                    {
+                        MapManager.UpdateTempMap();
+                    }
+
                     MapManager.LoadMap(MapToLoad);
                     MapToLoad = null;
                     CurrentSubstate = State.WaitingOnPlayerLoad;

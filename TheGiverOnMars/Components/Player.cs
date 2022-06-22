@@ -32,15 +32,38 @@ namespace TheGiverOnMars.Objects
             Tile.Position.Y = 100;
 
             InventoryManager = new InventoryManager(new Inventory(), Tile);
-
             AnimatedSprite = new AnimatedSprite(spriteSheet);
             AnimatedSprite.Play(CurrentAnimation);
         }
 
-        public void Update(GameTime gameTime, ref SceneManager stateManager, Map map)
+        public Player(Texture2D collisionTexture, SpriteSheet spriteSheet, PlayerSaveData playerData)
+        {
+            Tile = new CollisionTile(collisionTexture);
+            Tile.Speed = 4;
+            Tile.Position.X = playerData.PosX;
+            Tile.Position.Y = playerData.PosY;
+
+            InventoryManager = new InventoryManager(new Inventory(playerData.Inventory), Tile);
+            AnimatedSprite = new AnimatedSprite(spriteSheet);
+            AnimatedSprite.Play(CurrentAnimation);
+        }
+
+        public PlayerSaveData Save()
+        {
+            var data = new PlayerSaveData()
+            {
+                PosX = Tile.Position.X,
+                PosY = Tile.Position.Y,
+                Inventory = InventoryManager.Inventory.Save()
+            };
+
+            return data;
+        }
+
+        public void Update(GameTime gameTime, Map map)
         {
             Move(gameTime);
-            CheckTransitions(map.TransitionTiles, ref stateManager);
+            CheckTransitions(map.TransitionTiles);
             CheckPlacedObjects(map.PlacedObjects);
 
             foreach (var currentTile in map.CollisionRects)
@@ -115,31 +138,31 @@ namespace TheGiverOnMars.Objects
             }
         }
 
-        private void CheckTransitions(List<TransitionTile> transitionTiles, ref SceneManager stateManager)
+        private void CheckTransitions(List<TransitionTile> transitionTiles)
         {
             foreach (var currentTile in transitionTiles)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.C) && currentTile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
                 {
-                    stateManager.TransitionToMap(currentTile.MapTransitionTo);
+                    Constants.SceneManager.TransitionToMap(currentTile.MapTransitionTo);
                     NextSpawnPoint = currentTile.SpawnPointOnLoad;
                     Tile.Speed = 0;
                     InventoryManager.BlockOpen = true;
                 }
             }
 
-            if (stateManager.CurrentState == State.None && stateManager.CurrentSubstate == State.None)
+            if (Constants.SceneManager.CurrentState == State.None && Constants.SceneManager.CurrentSubstate == State.None)
             {
                 Tile.Speed = 4;
                 InventoryManager.BlockOpen = false;
             }
 
             // Load player data in this block
-            if (stateManager.CurrentSubstate == State.WaitingOnPlayerLoad)
+            if (Constants.SceneManager.CurrentSubstate == State.WaitingOnPlayerLoad)
             {
                 Tile.Position = (Vector2) NextSpawnPoint;
                 NextSpawnPoint = null;
-                stateManager.CurrentSubstate = State.PlayerLoadDone;
+                Constants.SceneManager.CurrentSubstate = State.PlayerLoadDone;
             }
         }
 

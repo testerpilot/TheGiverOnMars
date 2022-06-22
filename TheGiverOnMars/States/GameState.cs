@@ -7,8 +7,12 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 using TheGiverOnMars.Components;
+using TheGiverOnMars.Components.Item.Base;
+using TheGiverOnMars.Components.Item.Definitions;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
 
@@ -16,35 +20,54 @@ namespace TheGiverOnMars.States
 {
     public class GameState : State
     {
-        private SpriteBatch _spriteBatch;
-        private SpriteManager _spriteManager;
         private Player _player;
         private Camera _camera;
 
-        public GameState(TheGiverOnMars game, GraphicsDevice graphicsDevice, ContentManager content)
-          : base(game, graphicsDevice, content, Color.Black)
+        public GameState(GameStateSave save = null)
+          : base(Color.Black)
         {
-            _spriteBatch = new SpriteBatch(graphicsDevice);
-            _spriteManager = new SpriteManager(content);
+            SpriteManager.LoadSprites();
+            TileManager.LoadTiles();
 
-            TileManager.LoadTiles(_spriteManager);
-            MapManager.LoadMap("test");
+            if (save != null)
+            {
+                MapManager.LoadSave(save.MapData);
+                _player = new Player(SpriteManager.GetSpriteFromDict(2), Constants.Content.Load<SpriteSheet>("Player/motw.sf", new JsonContentLoader()), save.PlayerData);
+            }
+            else
+            {
+                MapManager.LoadMap("test");
+                _player = new Player(SpriteManager.GetSpriteFromDict(2), Constants.Content.Load<SpriteSheet>("Player/motw.sf", new JsonContentLoader()));
+            }
 
-            _player = new Player(_spriteManager.GetSpriteFromDict(2), _game.Content.Load<SpriteSheet>("Player/motw.sf", new JsonContentLoader()));
             _camera = new Camera();
+        }
+
+        public void Save()
+        {
+            var gameSave = new GameStateSave()
+            {
+                PlayerData = _player.Save(),
+                MapData = MapManager.GetTempMapSaves()
+            };
+
+            string serializedText = JsonSerializer.Serialize(gameSave);
+            string path = Directory.GetCurrentDirectory() + "/test.sav";
+
+            File.WriteAllText(path, serializedText);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+            spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-            MapManager.CurrentMap.Draw(_spriteBatch);
+            MapManager.CurrentMap.Draw(spriteBatch);
 
-            _player.Draw(_spriteBatch);
+            _player.Draw(spriteBatch);
 
-            _game._sceneManager.Draw(_spriteBatch, _player.Tile.Position);
+            Constants.SceneManager.Draw(spriteBatch, _player.Tile.Position);
 
-            _spriteBatch.End();
+            spriteBatch.End();
         }
 
         public override void PostUpdate(GameTime gameTime)
@@ -55,13 +78,16 @@ namespace TheGiverOnMars.States
         public override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                _game.Exit();
+                Constants.Game.Exit();
 
             // TODO: Add your update logic here
 
-            _player.Update(gameTime, ref _game._sceneManager, MapManager.CurrentMap);
+            if (Keyboard.GetState().IsKeyDown(Keys.Z))
+                Save();
+
+            _player.Update(gameTime, MapManager.CurrentMap);
             _camera.Follow(_player.Tile);
-            _game._sceneManager.Update(gameTime, _spriteBatch, _player.Tile.Position);
+            Constants.SceneManager.Update(gameTime, Constants.SpriteBatch, _player.Tile.Position);
         }
     }
 }

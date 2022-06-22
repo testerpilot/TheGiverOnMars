@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using TheGiverOnMars.Objects;
 
 namespace TheGiverOnMars.Components.Item.Base
@@ -14,6 +18,11 @@ namespace TheGiverOnMars.Components.Item.Base
             HasValue = hasValue;
         }
 
+        protected InventorySpace()
+        { 
+        }
+
+        [JsonIgnore]
         public SpriteTile SpriteTile
         {
             get
@@ -29,6 +38,7 @@ namespace TheGiverOnMars.Components.Item.Base
             }
         }
 
+        [JsonIgnore]
         public Item ItemInterfaced
         {
             get
@@ -59,6 +69,8 @@ namespace TheGiverOnMars.Components.Item.Base
                 return new StackInventorySpace(new ItemStack(ItemInterfaced, ((StackInventorySpace)this).ItemStack.Count));
             }
         }
+
+        public virtual string Serialize() => JsonSerializer.Serialize(this);
     }
 
     public class ItemInventorySpace : InventorySpace
@@ -69,6 +81,12 @@ namespace TheGiverOnMars.Components.Item.Base
         {
             Item = item;
         }
+
+        private ItemInventorySpace() : base()
+        { 
+        }
+
+        public override string Serialize() => JsonSerializer.Serialize(this);
     }
 
     public class StackInventorySpace : InventorySpace
@@ -79,6 +97,12 @@ namespace TheGiverOnMars.Components.Item.Base
         {
             ItemStack = itemStack;
         }
+
+        private StackInventorySpace() : base()
+        { 
+        }
+
+        public override string Serialize() => JsonSerializer.Serialize(this);
     }
 
     public class Inventory
@@ -110,5 +134,29 @@ namespace TheGiverOnMars.Components.Item.Base
                 Spaces[i] = new InventorySpace(false);
             }
         }
+
+        public Inventory(List<string> jsonSpaces)
+        {
+            Spaces = new InventorySpace[30];
+
+            for (int i = 0; i < jsonSpaces.Count; i++)
+            {
+                if (jsonSpaces[i].Contains("ItemStack"))
+                {
+                    Spaces[i] = JsonSerializer.Deserialize<StackInventorySpace>(jsonSpaces[i]);
+                }
+                else
+                {
+                    Spaces[i] = new InventorySpace(false);
+                }
+            }
+
+            for (int i = jsonSpaces.Count; i < 30; i++)
+            {
+                Spaces[i] = new InventorySpace(false);
+            }
+        }
+
+        public List<string> Save() => Spaces.Select(x => x.Serialize()).ToList();
     }
 }

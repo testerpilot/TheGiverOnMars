@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Text.Json;
+using TheGiverOnMars.Components.Item.Base;
+using TheGiverOnMars.Components.Item.Definitions;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
 using TheGiverOnMars.States;
@@ -9,20 +13,11 @@ namespace TheGiverOnMars
 {
     public class TheGiverOnMars : Game
     {
-        public GraphicsDeviceManager _graphics;
-        public SpriteBatch _spriteBatch;
-
-        public static int ScreenHeight;
-        public static int ScreenWidth;
-
-        private States.State _currentState;
-        private States.State _nextState;
-
-        public SceneManager _sceneManager;
-
         public TheGiverOnMars()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Constants.Graphics = new GraphicsDeviceManager(this);
+            Constants.Game = this;
+            Constants.Content = Content;
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -30,18 +25,18 @@ namespace TheGiverOnMars
 
         public void ChangeState(States.State state)
         {
-            _nextState = state;
+            Constants.NextState = state;
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _graphics.PreferredBackBufferWidth = 1600;
-            _graphics.PreferredBackBufferHeight = 900;
-            _graphics.ApplyChanges();
+            Constants.Graphics.PreferredBackBufferWidth = 1600;
+            Constants.Graphics.PreferredBackBufferHeight = 900;
+            Constants.Graphics.ApplyChanges();
 
-            ScreenHeight = _graphics.PreferredBackBufferHeight;
-            ScreenWidth = _graphics.PreferredBackBufferWidth;
+            Constants.ScreenHeight = Constants.Graphics.PreferredBackBufferHeight;
+            Constants.ScreenWidth = Constants.Graphics.PreferredBackBufferWidth;
 
             IsMouseVisible = true;
 
@@ -50,32 +45,32 @@ namespace TheGiverOnMars
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
-            _sceneManager = new SceneManager(_graphics);
+            Constants.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Constants.CurrentState = new MenuState();
+            Constants.SceneManager = new SceneManager();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (_nextState != null)
+            if (Constants.NextState != null)
             {
-                _currentState = _nextState;
+                Constants.CurrentState = Constants.NextState;
 
-                _nextState = null;
+                Constants.NextState = null;
             }
 
-            _currentState.Update(gameTime);
+            Constants.CurrentState.Update(gameTime);
 
-            _currentState.PostUpdate(gameTime);
+            Constants.CurrentState.PostUpdate(gameTime);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(_currentState.BackgroundColor);
+            GraphicsDevice.Clear(Constants.CurrentState.BackgroundColor);
 
-            _currentState.Draw(gameTime, _spriteBatch);
+            Constants.CurrentState.Draw(gameTime, Constants.SpriteBatch);
 
             base.Draw(gameTime);
         }

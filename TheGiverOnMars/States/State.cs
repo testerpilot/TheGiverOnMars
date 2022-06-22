@@ -11,12 +11,6 @@ namespace TheGiverOnMars.States
     {
         #region Fields
 
-        protected ContentManager _content;
-
-        protected GraphicsDevice _graphicsDevice;
-
-        protected TheGiverOnMars _game;
-
         public Color BackgroundColor;
 
         #endregion
@@ -27,14 +21,8 @@ namespace TheGiverOnMars.States
 
         public abstract void PostUpdate(GameTime gameTime);
 
-        public State(TheGiverOnMars game, GraphicsDevice graphicsDevice, ContentManager content, Color backgroundColor)
+        public State(Color backgroundColor)
         {
-            _game = game;
-
-            _graphicsDevice = graphicsDevice;
-
-            _content = content;
-
             BackgroundColor = backgroundColor;
         }
 

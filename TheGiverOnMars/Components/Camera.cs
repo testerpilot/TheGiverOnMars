@@ -17,8 +17,8 @@ namespace TheGiverOnMars.Objects
               0);
 
             var offset = Matrix.CreateTranslation(
-                TheGiverOnMars.ScreenWidth / 2,
-                TheGiverOnMars.ScreenHeight / 2,
+                Constants.ScreenWidth / 2,
+                Constants.ScreenHeight / 2,
                 0);
 
             Transform = position * offset;

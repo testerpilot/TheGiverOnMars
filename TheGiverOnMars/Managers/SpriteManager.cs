@@ -8,18 +8,18 @@ using TheGiverOnMars.Dictionaries;
 
 namespace TheGiverOnMars.Managers
 {
-    public class SpriteManager
+    public static class SpriteManager
     {
-        public Dictionary<int, Texture2D> SpriteDict = new Dictionary<int, Texture2D>();
+        public static Dictionary<int, Texture2D> SpriteDict = new Dictionary<int, Texture2D>();
 
-        public SpriteManager(ContentManager content)
+        public static void LoadSprites()
         {
             foreach (var keyValuePair in SpriteNameDictionary.Dictionary)
             {
-                SpriteDict.Add(keyValuePair.Key, content.Load<Texture2D>(keyValuePair.Value));
+                SpriteDict.Add(keyValuePair.Key, Constants.Content.Load<Texture2D>(keyValuePair.Value));
             }
         }
 
-        public Texture2D GetSpriteFromDict(int id) => SpriteDict.GetValueOrDefault(id);
+        public static Texture2D GetSpriteFromDict(int id) => SpriteDict.GetValueOrDefault(id);
     }
 }
