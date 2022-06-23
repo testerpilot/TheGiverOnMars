@@ -442,6 +442,14 @@ namespace TheGiverOnMars.Managers
             // Open and close Inventory GUI
             if (!BlockOpen && newKeyboardState.IsKeyDown(Keys.R) && !OldKeyboardState.IsKeyDown(Keys.R))
             {
+                if (IsInventoryOpen)
+                {
+                    InventoryInteractingWith = null;
+                    SelectedTileForMove = null;
+                    IsSelectedTileForMoveInOtherInv = null;
+                    IsSelectedTileInOtherInv = false;
+                }
+
                 IsInventoryOpen = !IsInventoryOpen;
             }
 

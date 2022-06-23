@@ -30,6 +30,12 @@ namespace TheGiverOnMars.Objects
             Tile.Speed = 4;
             Tile.Position.X = 100;
             Tile.Position.Y = 100;
+            Tile.OffsetX = -32;
+            Tile.OffsetY = -10;
+            Tile.CollisionHeight = 25;
+            Tile.CollisionWidth = 25;
+
+            MapManager.CurrentMap.CollisionRects.Add(Tile);
 
             InventoryManager = new InventoryManager(new Inventory(), Tile);
             AnimatedSprite = new AnimatedSprite(spriteSheet);
@@ -65,6 +71,7 @@ namespace TheGiverOnMars.Objects
             Move(gameTime);
             CheckTransitions(map.TransitionTiles);
             CheckPlacedObjects(map.PlacedObjects);
+            CheckDroppedItems();
 
             foreach (var currentTile in map.CollisionRects)
             {
@@ -176,6 +183,25 @@ namespace TheGiverOnMars.Objects
                     {
                         ((InteractablePlacedObject)currentObject.PlacedObject).Interact(this);
                     }
+                }
+
+                if (Keyboard.GetState().IsKeyDown(Keys.B) && currentObject.Tile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
+                {
+                    if (currentObject.PlacedObject.GetType().BaseType == typeof(PlacedObjectWithDrop))
+                    {
+                        currentObject.Break();
+                    }
+                }
+            }
+        }
+
+        private void CheckDroppedItems()
+        {
+            foreach (var droppedItem in MapManager.CurrentMap.DroppedItems)
+            {
+                if (droppedItem.Instance.InventorySprite.IsInProximity(Tile) && InventoryManager.Inventory.AddDroppedItem(droppedItem))
+                {
+                    MapManager.CurrentMap.ItemsForRemoval.Add(droppedItem);
                 }
             }
         }

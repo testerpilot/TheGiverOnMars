@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -81,6 +82,18 @@ namespace TheGiverOnMars.Components.Item.Base
 
         private ItemInstance()
         { 
+        }
+    }
+
+    public class DroppedItemInstance
+    { 
+        public ItemInstance Instance { get; set; }
+
+        public DroppedItemInstance(ItemInstance instance, Vector2 position)
+        {
+            Instance = instance;
+            Instance.InventorySprite = Instance.InventorySprite.DeepCopy();
+            Instance.InventorySprite.Position = position;
         }
     }
 

@@ -11,11 +11,23 @@ namespace TheGiverOnMars.Objects
     {
         public Texture2D _texture;
         public Vector2 Position;
+
+        public int OffsetX = 0, OffsetY = 0;
+        public int CollisionWidth = 64, CollisionHeight = 54;
+
+        public Point Center
+        {
+            get
+            {
+                return new Point((int) Position.X + (_texture.Width / 2) + OffsetX, (int) Position.Y + (_texture.Height / 2) + OffsetY);
+            }
+        }
+
         public Rectangle Rectangle
         {
             get
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+                return new Rectangle(Center.X - (CollisionWidth / 2), Center.Y - (CollisionHeight / 2), CollisionWidth, CollisionHeight);
             }
         }
 

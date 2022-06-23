@@ -5,7 +5,11 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Blue.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Chest.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Controls/Button.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Copper/CopperBar.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Copper/CopperNode.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Copper/CopperOre.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Dirt.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Fonts/Font.spritefont</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Grass.png</File>
@@ -19,6 +23,10 @@
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/TileMainGui.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

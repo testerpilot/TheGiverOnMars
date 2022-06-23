@@ -26,6 +26,7 @@ namespace TheGiverOnMars.Dictionaries
         {
             public float PosX { get; set; }
             public float PosY { get; set; }
+            public int ObjectId { get; set; }
 
             [JsonIgnore]
             public Vector2 Position
@@ -64,11 +65,13 @@ namespace TheGiverOnMars.Dictionaries
             public List<string> JsonData { get; set; }
 
             public ChestObjectEntry()
-            { 
+            {
+                ObjectId = 0;
             }
 
             public ChestObjectEntry(Vector2 position, Chest chest)
             {
+                ObjectId = 0;
                 Data = chest.Inventory.Spaces.ToList();
                 Position = position;
             }
@@ -137,6 +140,21 @@ namespace TheGiverOnMars.Dictionaries
                         {
                             new StackInventorySpace(new ItemStack(new IronBar(), 5))
                         }
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(8, 4),
+                        ObjectId = 1
+                    },                    
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(10, 4),
+                        ObjectId = 1
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(8, 6),
+                        ObjectId = 1
                     }
                 }
             },

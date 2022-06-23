@@ -157,6 +157,50 @@ namespace TheGiverOnMars.Components.Item.Base
             }
         }
 
+        public bool AddDroppedItem(DroppedItemInstance droppedItem)
+        {
+            var firstIndexWithoutValue = -1;
+
+            for (int i = 0; i < 30; i++)
+            {
+                if (!Spaces[i].HasValue)
+                {
+                    firstIndexWithoutValue = i;
+                    break;
+                }
+            }
+
+            if (droppedItem.Instance.Item.IsStackable)
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    if (Spaces[i].HasValue && Spaces[i].ItemInterfaced.Name.Equals(droppedItem.Instance.Item.Name))
+                    {
+                        var tempSpace = (StackInventorySpace)Spaces[i];
+                        tempSpace.ItemStack.Count++;
+                        Spaces[i] = tempSpace;
+                        return true;
+                    }
+                }
+
+                if (firstIndexWithoutValue != -1)
+                {
+                    Spaces[firstIndexWithoutValue] = new StackInventorySpace(new ItemStack(droppedItem.Instance, 1));
+                    return true;
+                }
+            }
+            else
+            {
+                if (firstIndexWithoutValue != -1)
+                {
+                    Spaces[firstIndexWithoutValue] = new ItemInventorySpace(droppedItem.Instance);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public List<string> Save() => Spaces.Select(x => x.Serialize()).ToList();
     }
 }

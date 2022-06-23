@@ -15,6 +15,7 @@ namespace TheGiverOnMars.Components.Item.Definitions
             BaseBuyPrice = 40;
 
             // BaseItem Attributes
+            Name = "Iron Ore";
             TileId = 21;
             Attributes = null;
             IsStackable = true;
@@ -29,7 +30,8 @@ namespace TheGiverOnMars.Components.Item.Definitions
             BaseSellPrice = 200;
             BaseBuyPrice = 400;
 
-            // BaseItem Attributes
+            // BaseItem Attributes-
+            Name = "Iron Bar";
             TileId = 22;
             Attributes = null;
             IsStackable = true;

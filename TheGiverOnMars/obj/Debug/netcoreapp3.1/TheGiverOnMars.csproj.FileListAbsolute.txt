@@ -39,3 +39,7 @@ C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\C
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\TileMainGui.xnb
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Iron\IronBar.xnb
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Iron\IronOre.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Copper\CopperBar.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Copper\CopperNode.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Copper\CopperOre.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Chest.xnb

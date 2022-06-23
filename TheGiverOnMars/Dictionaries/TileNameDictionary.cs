@@ -40,7 +40,11 @@ namespace TheGiverOnMars.Dictionaries
             new TileDictEntry(10, 2, true, "BlueCol"),
             new TileDictEntry(20, 7, false, "InvOnMainGui", isStatic: true),
             new TileDictEntry(21, 10, false, "IronOre", isStatic: true),
-            new TileDictEntry(22, 11, false, "IronBar", isStatic: true)
+            new TileDictEntry(22, 11, false, "IronBar", isStatic: true),
+            new TileDictEntry(23, 12, false, "CopperOre", isStatic: true),
+            new TileDictEntry(24, 13, false, "CopperBar", isStatic: true),
+            new TileDictEntry(25, 14, true, "CopperNode"),
+            new TileDictEntry(26, 15, true, "Chest"),
         };
     }
 }

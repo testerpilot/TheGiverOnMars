@@ -17,7 +17,11 @@ namespace TheGiverOnMars.Dictionaries
             { 6, "MarsGrass3" },
             { 7, "TileMainGui" },
             { 10, "Iron/IronOre" },
-            { 11, "Iron/IronBar" }
+            { 11, "Iron/IronBar" },
+            { 12,  "Copper/CopperOre" },
+            { 13,  "Copper/CopperBar" },
+            { 14,  "Copper/CopperNode" },
+            { 15, "Chest" }
         };
     }
 }

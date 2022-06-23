@@ -18,6 +18,11 @@ namespace TheGiverOnMars.Objects
         public List<CollisionTile> CollisionRects = new List<CollisionTile>();
         public List<TransitionTile> TransitionTiles = new List<TransitionTile>();
         public List<PlacedObjectInstance> PlacedObjects = new List<PlacedObjectInstance>();
+        public List<DroppedItemInstance> DroppedItems = new List<DroppedItemInstance>();
+
+        public PlacedObjectInstance PlacedObjectForRemoval = null;
+        public List<DroppedItemInstance> ItemsForRemoval = new List<DroppedItemInstance>();
+
         public string Name { get; set; }
 
         public Map(MapDictionaryEntry mapData)
@@ -79,16 +84,39 @@ namespace TheGiverOnMars.Objects
                     {
                         instance = new PlacedObjectInstance(new Chest(chestData.Data));
                     }
-
-                    instance.Tile.Position = placedObject.Position * 64;
-
-                    PlacedObjects.Add(instance);
-
-                    if (instance.Tile.GetType() == typeof(CollisionTile))
-                    {
-                        CollisionRects.Add((CollisionTile)instance.Tile);
-                    }
                 }
+                else
+                {
+                    instance = new PlacedObjectInstance(PlacedObjectDictionary.Dictionary[placedObject.ObjectId]);
+                }
+
+                instance.Tile.Position = placedObject.Position * 64;
+
+                PlacedObjects.Add(instance);
+
+                if (instance.Tile.GetType() == typeof(CollisionTile))
+                {
+                    CollisionRects.Add((CollisionTile)instance.Tile);
+                }
+            }
+        }
+
+        public void Spawn(int itemId, Vector2 position, int count = 1)
+        {
+            DroppedItems.Add(new DroppedItemInstance(new ItemInstance(ItemDictionary.Dictionary[itemId]), position));
+        }
+
+        public void Update()
+        {
+            if (PlacedObjectForRemoval != null)
+            {
+                PlacedObjects.Remove(PlacedObjectForRemoval);
+                PlacedObjectForRemoval = null;
+            }
+
+            foreach (var item in ItemsForRemoval)
+            {
+                DroppedItems.Remove(item);
             }
         }
 
@@ -105,6 +133,11 @@ namespace TheGiverOnMars.Objects
             foreach (var placedObject in PlacedObjects)
             {
                 placedObject.Tile.Draw(spriteBatch);
+            }
+
+            foreach (var droppedItem in DroppedItems)
+            {
+                droppedItem.Instance.InventorySprite.Draw(spriteBatch, Color.White);
             }
         }
     }

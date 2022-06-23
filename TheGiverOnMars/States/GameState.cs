@@ -85,6 +85,8 @@ namespace TheGiverOnMars.States
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
                 Save();
 
+            MapManager.CurrentMap.Update();
+
             _player.Update(gameTime, MapManager.CurrentMap);
             _camera.Follow(_player.Tile);
             Constants.SceneManager.Update(gameTime, Constants.SpriteBatch, _player.Tile.Position);

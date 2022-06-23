@@ -13,7 +13,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
         public Chest()
         {
             Name = "Chest";
-            TileID = 10;
+            TileID = 26;
 
             Inventory = new Inventory();
         }
@@ -21,7 +21,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
         public Chest(List<InventorySpace> inventorySpaces)
         {
             Name = "Chest";
-            TileID = 10;
+            TileID = 26;
 
             Inventory = new Inventory(inventorySpaces);
         }
