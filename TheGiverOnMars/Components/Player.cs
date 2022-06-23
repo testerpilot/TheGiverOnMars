@@ -73,6 +73,14 @@ namespace TheGiverOnMars.Objects
             CheckPlacedObjects(map.PlacedObjects);
             CheckDroppedItems();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.B) &&
+                !InventoryManager.IsInventoryOpen &&
+                InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].HasValue &&
+                InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced.GetType().IsSubclassOf(typeof(ActionItem)))
+            {
+                ((ActionItem)InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced).OnUse(this);
+            }
+
             foreach (var currentTile in map.CollisionRects)
             {
                 if (currentTile == Tile)
@@ -182,14 +190,6 @@ namespace TheGiverOnMars.Objects
                     if (currentObject.PlacedObject.GetType().BaseType == typeof(InteractablePlacedObject))
                     {
                         ((InteractablePlacedObject)currentObject.PlacedObject).Interact(this);
-                    }
-                }
-
-                if (Keyboard.GetState().IsKeyDown(Keys.B) && currentObject.Tile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
-                {
-                    if (currentObject.PlacedObject.GetType().BaseType == typeof(PlacedObjectWithDrop))
-                    {
-                        currentObject.Break();
                     }
                 }
             }

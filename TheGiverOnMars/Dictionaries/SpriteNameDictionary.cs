@@ -21,7 +21,8 @@ namespace TheGiverOnMars.Dictionaries
             { 12,  "Copper/CopperOre" },
             { 13,  "Copper/CopperBar" },
             { 14,  "Copper/CopperNode" },
-            { 15, "Chest" }
+            { 15, "Chest" },
+            { 16, "Pickaxe" }
         };
     }
 }

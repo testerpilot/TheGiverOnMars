@@ -10,9 +10,10 @@ namespace TheGiverOnMars.Dictionaries
     {
         public static Dictionary<int, Item> Dictionary = new Dictionary<int, Item>()
         {
-            { 1 , new IronBar() },
+            { 1, new IronBar() },
             { 2, new CopperBar() },
-            { 3, new CopperOre() }
+            { 3, new CopperOre() },
+            { 4, new Pickaxe() }
         };
     }
 }

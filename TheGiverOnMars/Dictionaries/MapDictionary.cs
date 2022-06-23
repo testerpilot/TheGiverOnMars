@@ -130,7 +130,8 @@ namespace TheGiverOnMars.Dictionaries
                         Position = new Vector2(3, 5),
                         Data = new List<InventorySpace>()
                         {
-                            new StackInventorySpace(new ItemStack(new IronOre(), 5))
+                            new StackInventorySpace(new ItemStack(new IronOre(), 5)),
+                            new ItemInventorySpace(new ItemInstance(new Pickaxe()))
                         }
                     },
                     new MapDictionaryEntry.ChestObjectEntry()

@@ -19,10 +19,12 @@
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/MarsGrass2.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/MarsGrass3.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/MarsGrass4.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Pickaxe.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Player/motw.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/TileMainGui.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

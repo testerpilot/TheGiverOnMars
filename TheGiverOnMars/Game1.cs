@@ -32,7 +32,7 @@ namespace TheGiverOnMars
         {
             // TODO: Add your initialization logic here
             Constants.Graphics.PreferredBackBufferWidth = 1600;
-            Constants.Graphics.PreferredBackBufferHeight = 900;
+            Constants.Graphics.PreferredBackBufferHeight = 950;
             Constants.Graphics.ApplyChanges();
 
             Constants.ScreenHeight = Constants.Graphics.PreferredBackBufferHeight;

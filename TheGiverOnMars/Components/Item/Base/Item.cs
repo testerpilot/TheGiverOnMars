@@ -34,7 +34,7 @@ namespace TheGiverOnMars.Components.Item.Base
     /// </summary>
     public abstract class ActionItem : Item
     {
-        public abstract void OnUse();
+        public abstract void OnUse(Player player);
     }
 
     /// <summary>

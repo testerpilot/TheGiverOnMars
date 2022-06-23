@@ -12,6 +12,7 @@ namespace TheGiverOnMars.Components.PlacedObject
             Name = "Copper Node";
             ItemIDOnDrop = 3;
             NumItem = 2;
+            BreakableWith = new List<string> { "Pickaxe" };
         }
     }
 }

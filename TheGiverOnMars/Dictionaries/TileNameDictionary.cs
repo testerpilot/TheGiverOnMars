@@ -45,6 +45,7 @@ namespace TheGiverOnMars.Dictionaries
             new TileDictEntry(24, 13, false, "CopperBar", isStatic: true),
             new TileDictEntry(25, 14, true, "CopperNode"),
             new TileDictEntry(26, 15, true, "Chest"),
+            new TileDictEntry(27, 16, false, "Pickaxe")
         };
     }
 }

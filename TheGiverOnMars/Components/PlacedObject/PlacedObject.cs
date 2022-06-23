@@ -16,7 +16,12 @@ namespace TheGiverOnMars.Components.PlacedObject
         public string Name;
     }
 
-    public class PlacedObjectWithDrop : PlacedObject
+    public class BreakablePlacedObject : PlacedObject
+    {
+        public List<string> BreakableWith;
+    }
+
+    public class PlacedObjectWithDrop : BreakablePlacedObject
     {
         public int ItemIDOnDrop;
         public int NumItem;
