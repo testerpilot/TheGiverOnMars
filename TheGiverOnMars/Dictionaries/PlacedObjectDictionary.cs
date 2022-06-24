@@ -11,7 +11,8 @@ namespace TheGiverOnMars.Dictionaries
         public static Dictionary<int, PlacedObject> Dictionary = new Dictionary<int, PlacedObject>()
         {
             { 0, new Chest() },
-            { 1, new CopperNode() }
+            { 1, new CopperNode() },
+            { 2, new Furnace() }
         };
     }
 }

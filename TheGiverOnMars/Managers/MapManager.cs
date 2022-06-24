@@ -53,6 +53,14 @@ namespace TheGiverOnMars.Managers
                 {
                     TempMapDictionary[index].PlacedObjectEntries.Add(new MapDictionaryEntry.ChestObjectEntry(instance.Tile.Position / 64, instance.PlacedObject as Chest));
                 }
+                else
+                {
+                    TempMapDictionary[index].PlacedObjectEntries.Add(new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = instance.Tile.Position / 64,
+                        ObjectId = PlacedObjectDictionary.Dictionary.FirstOrDefault(x => x.Value.Name == instance.PlacedObject.Name).Key
+                    });
+                }
             }
         }
 
@@ -66,7 +74,8 @@ namespace TheGiverOnMars.Managers
                 MapSaves = TempMapDictionary.Select(x => new MapEntrySaveData()
                 {
                     Name = x.MapName,
-                    ChestEntries = x.PlacedObjectEntries.Where(x => x.GetType().Equals(typeof(MapDictionaryEntry.ChestObjectEntry))).Select(x => x as MapDictionaryEntry.ChestObjectEntry).ToList()
+                    ChestEntries = x.PlacedObjectEntries.Where(x => x.GetType().Equals(typeof(MapDictionaryEntry.ChestObjectEntry))).Select(x => x as MapDictionaryEntry.ChestObjectEntry).ToList(),
+                    ObjectEntries = x.PlacedObjectEntries.Where(x => !x.GetType().Equals(typeof(MapDictionaryEntry.ChestObjectEntry))).ToList()
                 }).ToList()
             };
 
@@ -79,6 +88,7 @@ namespace TheGiverOnMars.Managers
             {
                 var entry = GetMapEntry(mapSave.Name);
                 entry.PlacedObjectEntries = mapSave.ChestEntries.Select(x => x as MapDictionaryEntry.PlacedObjectEntry).ToList();
+                entry.PlacedObjectEntries.AddRange(mapSave.ObjectEntries);
                 TempMapDictionary.Add(entry);
             }
 

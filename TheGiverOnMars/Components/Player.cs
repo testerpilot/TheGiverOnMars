@@ -24,6 +24,8 @@ namespace TheGiverOnMars.Objects
 
         public InventoryManager InventoryManager;
 
+        public KeyboardState OldState;
+
         public Player(Texture2D collisionTexture, SpriteSheet spriteSheet)
         {
             Tile = new CollisionTile(collisionTexture);
@@ -68,12 +70,15 @@ namespace TheGiverOnMars.Objects
 
         public void Update(GameTime gameTime, Map map)
         {
+            var newState = Keyboard.GetState();
+
             Move(gameTime);
             CheckTransitions(map.TransitionTiles);
             CheckPlacedObjects(map.PlacedObjects);
             CheckDroppedItems();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.B) &&
+            if (newState.IsKeyDown(Keys.B) &&
+                OldState.IsKeyUp(Keys.B) &&
                 !InventoryManager.IsInventoryOpen &&
                 InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].HasValue &&
                 InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced.GetType().IsSubclassOf(typeof(ActionItem)))
@@ -104,6 +109,8 @@ namespace TheGiverOnMars.Objects
             Tile.Velocity = Vector2.Zero;
 
             InventoryManager.Update(gameTime);
+
+            OldState = newState;
         }
 
         private void Move(GameTime gameTime)
@@ -185,9 +192,9 @@ namespace TheGiverOnMars.Objects
         {
             foreach (var currentObject in placedObjects)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.C) && currentObject.Tile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
+                if (Keyboard.GetState().IsKeyDown(Keys.C) && OldState.IsKeyUp(Keys.C) && currentObject.Tile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
                 {
-                    if (currentObject.PlacedObject.GetType().BaseType == typeof(InteractablePlacedObject))
+                    if (currentObject.PlacedObject.GetType().IsSubclassOf(typeof(InteractablePlacedObject)))
                     {
                         ((InteractablePlacedObject)currentObject.PlacedObject).Interact(this);
                     }

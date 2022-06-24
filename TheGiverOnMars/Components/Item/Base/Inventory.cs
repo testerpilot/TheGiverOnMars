@@ -145,6 +145,10 @@ namespace TheGiverOnMars.Components.Item.Base
                 {
                     Spaces[i] = JsonSerializer.Deserialize<StackInventorySpace>(jsonSpaces[i]);
                 }
+                else if (jsonSpaces[i].Contains("Item"))
+                {
+                    Spaces[i] = JsonSerializer.Deserialize<ItemInventorySpace>(jsonSpaces[i]);
+                }
                 else
                 {
                     Spaces[i] = new InventorySpace(false);

@@ -9,6 +9,7 @@ namespace TheGiverOnMars.Components
     {
         public string Name { get; set; }
         public List<MapDictionaryEntry.ChestObjectEntry> ChestEntries { get; set; }
+        public List<MapDictionaryEntry.PlacedObjectEntry> ObjectEntries { get; set; }
     }
 
     public class MapSaveData

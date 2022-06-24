@@ -22,13 +22,26 @@ namespace TheGiverOnMars.Components.Item.Definitions
         public override void OnUse(Player player)
         {
             foreach (var currentObject in MapManager.CurrentMap.PlacedObjects.Where(x => x.Tile.IsInProximity(player.Tile) &&
-                x.PlacedObject.GetType().IsSubclassOf(typeof(BreakablePlacedObject))))
+                (x.PlacedObject.GetType().IsSubclassOf(typeof(BreakablePlacedObject)) ||
+                 x.PlacedObject.GetType().IsSubclassOf(typeof(BreakableInteractablePlacedObject)))))
             {
-                var breakableObject = (BreakablePlacedObject)currentObject.PlacedObject;
-
-                if (breakableObject.BreakableWith.Contains(Name))
+                if (currentObject.PlacedObject.GetType().IsSubclassOf(typeof(BreakablePlacedObject)))
                 {
-                    currentObject.Break();
+                    var breakableObject = (BreakablePlacedObject)currentObject.PlacedObject;
+
+                    if (breakableObject.BreakableWith.Contains(Name))
+                    {
+                        currentObject.Break();
+                    }
+                }
+                else
+                {
+                    var breakableObject = (BreakableInteractablePlacedObject)currentObject.PlacedObject;
+
+                    if (breakableObject.BreakableWith().Contains(Name))
+                    {
+                        currentObject.Break();
+                    }
                 }
             }
         }

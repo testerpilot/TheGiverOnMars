@@ -156,6 +156,11 @@ namespace TheGiverOnMars.Dictionaries
                     {
                         Position = new Vector2(8, 6),
                         ObjectId = 1
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(8, 8),
+                        ObjectId = 2
                     }
                 }
             },

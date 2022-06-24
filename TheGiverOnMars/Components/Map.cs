@@ -101,9 +101,12 @@ namespace TheGiverOnMars.Objects
             }
         }
 
-        public void Spawn(int itemId, Vector2 position, int count = 1)
+        public void Spawn(Item item, Vector2 position, int count = 1)
         {
-            DroppedItems.Add(new DroppedItemInstance(new ItemInstance(ItemDictionary.Dictionary[itemId]), position));
+            for (int i = 0; i < count; i++)
+            {
+                DroppedItems.Add(new DroppedItemInstance(new ItemInstance(item), position));
+            }
         }
 
         public void Update()

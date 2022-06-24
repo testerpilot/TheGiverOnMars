@@ -33,6 +33,7 @@ namespace TheGiverOnMars.Components.Item.Definitions
             TileId = 24;
             Attributes = null;
             IsStackable = true;
+            Name = "Copper Bar";
         }
     }
 }

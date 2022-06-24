@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TheGiverOnMars.Dictionaries;
 
 namespace TheGiverOnMars.Components.PlacedObject
 {
@@ -10,8 +11,7 @@ namespace TheGiverOnMars.Components.PlacedObject
         {
             TileID = 25;
             Name = "Copper Node";
-            ItemIDOnDrop = 3;
-            NumItem = 2;
+            ItemIdAndQuantity.Add((ItemDictionary.Dictionary[3], 2));
             BreakableWith = new List<string> { "Pickaxe" };
         }
     }
