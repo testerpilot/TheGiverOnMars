@@ -15,16 +15,52 @@ namespace TheGiverOnMars.Components.PlacedObject
     {
         public int TileID;
         public string Name;
+
+        public virtual PlacedObject DeepCopy()
+        {
+            var temp = new PlacedObject();
+
+            temp.TileID = TileID;
+            temp.Name = Name;
+
+            return temp;
+        }
     }
 
     public class BreakablePlacedObject : PlacedObject
     {
-        public List<string> BreakableWith = new List<string>();
+        public Dictionary<string, int> BreakableWith = new Dictionary<string, int>();
+        public int Health;
+
+        public override PlacedObject DeepCopy()
+        {
+            var temp = new BreakablePlacedObject();
+
+            temp.Health = Health;
+            temp.BreakableWith = BreakableWith;
+            temp.Name = Name;
+            temp.TileID = TileID;
+
+            return temp;
+        }
     }
 
     public class PlacedObjectWithDrop : BreakablePlacedObject
     {
         public List<(BaseItem.Item, int)> ItemIdAndQuantity = new List<(BaseItem.Item, int)>();
+
+        public override PlacedObject DeepCopy()
+        {
+            var temp = new PlacedObjectWithDrop();
+
+            temp.ItemIdAndQuantity = ItemIdAndQuantity;
+            temp.Health = Health;
+            temp.BreakableWith = BreakableWith;
+            temp.Name = Name;
+            temp.TileID = TileID;
+
+            return temp;
+        }
     }
 
     public class PlacedObjectInstance
@@ -38,50 +74,89 @@ namespace TheGiverOnMars.Components.PlacedObject
             Tile = TileManager.GetTileFromID(placedObject.TileID).DeepCopy();
         }
 
-        public void Break()
+        public void Update(GameTime gameTime)
         {
-            if (PlacedObject.GetType().IsSubclassOf(typeof(BreakablePlacedObject)) || PlacedObject.GetType().IsSubclassOf(typeof(BreakableInteractablePlacedObject)))
+            if (PlacedObject.GetType().IsSubclassOf(typeof(InteractablePlacedObject)))
             {
-                MapManager.CurrentMap.PlacedObjectForRemoval = this;
+                ((InteractablePlacedObject)PlacedObject).Update(gameTime, Tile);
+            }
+        }
 
-                if (Tile.GetType().Equals(typeof(CollisionTile)))
+        public void Break(string tool)
+        {
+            if (PlacedObject.GetType().IsSubclassOf(typeof(BreakablePlacedObject)))
+            {
+                var breakableObject = (BreakablePlacedObject)PlacedObject;
+                breakableObject.Health -= breakableObject.BreakableWith[tool];
+
+                if (breakableObject.Health > 0)
                 {
-                    MapManager.CurrentMap.CollisionRects.Remove((CollisionTile)Tile);
+                    return;
                 }
+            }
+            else if (PlacedObject.GetType().IsSubclassOf(typeof(BreakableInteractablePlacedObject)))
+            {
+                var breakableObject = (BreakableInteractablePlacedObject)PlacedObject;
+                breakableObject.SubtractHealth(breakableObject.BreakableWith()[tool]);
 
-                if (PlacedObject.GetType().IsSubclassOf(typeof(PlacedObjectWithDrop)))
+                if (breakableObject.Health() > 0)
                 {
-                    var objectWithDrop = (PlacedObjectWithDrop)PlacedObject;
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
 
-                    foreach (var tuple in objectWithDrop.ItemIdAndQuantity)
+            MapManager.CurrentMap.PlacedObjectForRemoval = this;
+
+            if (Tile.GetType().Equals(typeof(CollisionTile)))
+            {
+                MapManager.CurrentMap.CollisionRects.Remove((CollisionTile)Tile);
+            }
+
+            if (PlacedObject.GetType().Equals(typeof(PlacedObjectWithDrop)) || 
+                PlacedObject.GetType().IsSubclassOf(typeof(PlacedObjectWithDrop)))
+            {
+                var objectWithDrop = (PlacedObjectWithDrop)PlacedObject;
+
+                foreach (var tuple in objectWithDrop.ItemIdAndQuantity)
+                {
+                    MapManager.CurrentMap.Spawn(tuple.Item1, Tile.Position, tuple.Item2);
+                }
+            }
+            else if (PlacedObject.GetType().IsSubclassOf(typeof(InteractablePlacedObjectWithDrop)))
+            {
+                var objectWithDrop = (InteractablePlacedObjectWithDrop)PlacedObject;
+
+                if (objectWithDrop.ItemIdAndQuantityOnDrop() != null)
+                {
+                    foreach (var tuple in objectWithDrop.ItemIdAndQuantityOnDrop())
                     {
                         MapManager.CurrentMap.Spawn(tuple.Item1, Tile.Position, tuple.Item2);
                     }
                 }
-                else if (PlacedObject.GetType().IsSubclassOf(typeof(InteractablePlacedObjectWithDrop)))
-                {
-                    var objectWithDrop = (InteractablePlacedObjectWithDrop)PlacedObject;
-
-                    if (objectWithDrop.ItemIdAndQuantityOnDrop() != null)
-                    {
-                        foreach (var tuple in objectWithDrop.ItemIdAndQuantityOnDrop())
-                        {
-                            MapManager.CurrentMap.Spawn(tuple.Item1, Tile.Position, tuple.Item2);
-                        }
-                    }
-                }
             }
         }
+
     }
 
     public abstract class InteractablePlacedObject : PlacedObject
     {
         public abstract void Interact(Player player);
+
+        // Object may want to update texture based on state
+        public abstract void Update(GameTime gameTime, SpriteTile tile);
+
+        public override abstract PlacedObject DeepCopy();
     }
 
     public abstract class BreakableInteractablePlacedObject : InteractablePlacedObject
     {
-        public abstract List<string> BreakableWith();
+        public abstract Dictionary<string, int> BreakableWith();
+        public abstract void SubtractHealth(int damage);
+        public abstract int Health();
     }
 
     public abstract class InteractablePlacedObjectWithDrop : BreakableInteractablePlacedObject

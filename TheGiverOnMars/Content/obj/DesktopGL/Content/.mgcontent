@@ -13,6 +13,7 @@
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Dirt.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Fonts/Font.spritefont</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Furnance.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/FurnanceDone.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Grass.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Iron/IronBar.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Iron/IronOre.png</File>
@@ -34,6 +35,7 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File>Furnace.png</File>
+    <File>FurnaceProcessing.png</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

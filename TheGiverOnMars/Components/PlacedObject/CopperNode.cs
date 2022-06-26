@@ -10,9 +10,14 @@ namespace TheGiverOnMars.Components.PlacedObject
         public CopperNode()
         {
             TileID = 25;
+            Health = 4;
             Name = "Copper Node";
             ItemIdAndQuantity.Add((ItemDictionary.Dictionary[3], 2));
-            BreakableWith = new List<string> { "Pickaxe" };
-        }
+            BreakableWith = 
+            new Dictionary<string, int>()
+            {
+                { "Pickaxe", 2 }
+            };
+        }   
     }
 }

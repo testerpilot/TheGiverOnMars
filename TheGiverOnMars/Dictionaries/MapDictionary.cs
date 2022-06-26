@@ -131,7 +131,9 @@ namespace TheGiverOnMars.Dictionaries
                         Data = new List<InventorySpace>()
                         {
                             new StackInventorySpace(new ItemStack(new IronOre(), 5)),
-                            new ItemInventorySpace(new ItemInstance(new Pickaxe()))
+                            new ItemInventorySpace(new ItemInstance(new Pickaxe())),
+                            new StackInventorySpace(new ItemStack(new ChestItem(), 1)),
+                            new StackInventorySpace(new ItemStack(new FurnaceItem(), 1))
                         }
                     },
                     new MapDictionaryEntry.ChestObjectEntry()

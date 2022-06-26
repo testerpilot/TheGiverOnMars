@@ -19,7 +19,7 @@ namespace TheGiverOnMars.Components.Item.Base
         }
 
         protected InventorySpace()
-        { 
+        {
         }
 
         [JsonIgnore]
@@ -83,7 +83,7 @@ namespace TheGiverOnMars.Components.Item.Base
         }
 
         private ItemInventorySpace() : base()
-        { 
+        {
         }
 
         public override string Serialize() => JsonSerializer.Serialize(this);
@@ -99,7 +99,7 @@ namespace TheGiverOnMars.Components.Item.Base
         }
 
         private StackInventorySpace() : base()
-        { 
+        {
         }
 
         public override string Serialize() => JsonSerializer.Serialize(this);
@@ -203,6 +203,28 @@ namespace TheGiverOnMars.Components.Item.Base
             }
 
             return false;
+        }
+
+        public void RemoveItemFromSpace(int space, int numToRemove = 1)
+        {
+            if (Spaces[space].ItemInterfaced.IsStackable)
+            {
+                var temp = (StackInventorySpace)Spaces[space];
+                temp.ItemStack.Count -= 1;
+
+                if (temp.ItemStack.Count <= 0)
+                {
+                    Spaces[space] = new InventorySpace(false);
+                }
+                else
+                {
+                    Spaces[space] = temp;
+                }
+            }
+            else
+            {
+                Spaces[space] = new InventorySpace(false);
+            }
         }
 
         public List<string> Save() => Spaces.Select(x => x.Serialize()).ToList();

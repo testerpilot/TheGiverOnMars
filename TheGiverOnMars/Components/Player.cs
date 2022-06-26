@@ -15,16 +15,18 @@ using TheGiverOnMars.Utilities;
 
 namespace TheGiverOnMars.Objects
 {
+
     public class Player
     {
+        public enum Direction { N, S, E, W };
+
         public CollisionTile Tile;
         public AnimatedSprite AnimatedSprite;
         public Vector2? NextSpawnPoint = null;
         public string CurrentAnimation = "idleSouth";
+        public Direction CurrentDirection = Direction.S;
 
         public InventoryManager InventoryManager;
-
-        public KeyboardState OldState;
 
         public Player(Texture2D collisionTexture, SpriteSheet spriteSheet)
         {
@@ -70,20 +72,27 @@ namespace TheGiverOnMars.Objects
 
         public void Update(GameTime gameTime, Map map)
         {
-            var newState = Keyboard.GetState();
-
             Move(gameTime);
             CheckTransitions(map.TransitionTiles);
             CheckPlacedObjects(map.PlacedObjects);
+            CheckPlaceableItem();
             CheckDroppedItems();
 
-            if (newState.IsKeyDown(Keys.B) &&
-                OldState.IsKeyUp(Keys.B) &&
-                !InventoryManager.IsInventoryOpen &&
-                InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].HasValue &&
-                InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced.GetType().IsSubclassOf(typeof(ActionItem)))
+            if (!InventoryManager.IsInventoryOpen && 
+                Constants.Input.Use.IsJustPressed())
             {
-                ((ActionItem)InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced).OnUse(this);
+                if (InventoryManager.IsOnPlaceableItem && !InventoryManager.PlaceObjectBlocked)
+                {
+                    ((PlaceableItem)InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced).Place(InventoryManager.TemporaryPlacedObjectInstance.Tile.PositionOnMap);
+
+                    InventoryManager.Inventory.RemoveItemFromSpace(InventoryManager.SelectedTile);
+                }
+
+                if (InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].HasValue &&
+                    InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced.GetType().IsSubclassOf(typeof(ActionItem)))
+                {
+                    ((ActionItem)InventoryManager.Inventory.Spaces[InventoryManager.SelectedTile].ItemInterfaced).OnUse(this);
+                }
             }
 
             foreach (var currentTile in map.CollisionRects)
@@ -109,8 +118,33 @@ namespace TheGiverOnMars.Objects
             Tile.Velocity = Vector2.Zero;
 
             InventoryManager.Update(gameTime);
+        }
 
-            OldState = newState;
+        private void CheckPlaceableItem()
+        {
+            if (InventoryManager.IsOnPlaceableItem)
+            {
+                var position = Tile.PositionOnMap;
+
+                if (CurrentDirection == Direction.W)
+                {
+                    position.X -= 1;
+                }
+                if (CurrentDirection == Direction.E)
+                {
+                    position.X += 1;
+                }
+                if (CurrentDirection == Direction.N)
+                {
+                    position.Y -= 1;
+                }
+                if (CurrentDirection == Direction.S)
+                {
+                    position.Y += 1;
+                }
+
+                InventoryManager.TemporaryPlacedObjectInstance.Tile.PositionOnMap = position;
+            }
         }
 
         private void Move(GameTime gameTime)
@@ -128,28 +162,32 @@ namespace TheGiverOnMars.Objects
                     CurrentAnimation = CurrentAnimation.Replace("walk", "idle");
                 }
 
-                if (keyboardState.IsKeyDown(Keys.Left))
+                if (Constants.Input.Left.IsDown())
                 {
                     Tile.Velocity.X = -Tile.Speed;
                     CurrentAnimation = "walkWest";
+                    CurrentDirection = Direction.W;
                 }
 
-                else if (keyboardState.IsKeyDown(Keys.Right))
+                else if (Constants.Input.Right.IsDown())
                 {
                     Tile.Velocity.X = Tile.Speed;
                     CurrentAnimation = "walkEast";
+                    CurrentDirection = Direction.E;
                 }
 
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if (Constants.Input.Up.IsDown())
                 {
                     Tile.Velocity.Y = -Tile.Speed;
                     CurrentAnimation = "walkNorth";
+                    CurrentDirection = Direction.N;
                 }
 
-                else if (keyboardState.IsKeyDown(Keys.Down))
+                else if (Constants.Input.Down.IsDown())
                 {
                     Tile.Velocity.Y = Tile.Speed;
                     CurrentAnimation = "walkSouth";
+                    CurrentDirection = Direction.S;
                 }
 
                 if (Tile.Speed != 0)
@@ -164,7 +202,7 @@ namespace TheGiverOnMars.Objects
         {
             foreach (var currentTile in transitionTiles)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.C) && currentTile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
+                if (Constants.Input.Interact.IsDown() && currentTile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
                 {
                     Constants.SceneManager.TransitionToMap(currentTile.MapTransitionTo);
                     NextSpawnPoint = currentTile.SpawnPointOnLoad;
@@ -192,9 +230,10 @@ namespace TheGiverOnMars.Objects
         {
             foreach (var currentObject in placedObjects)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.C) && OldState.IsKeyUp(Keys.C) && currentObject.Tile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
+                if (Constants.Input.Interact.IsDown() && currentObject.Tile.IsInProximity(Tile) && !InventoryManager.IsInventoryOpen)
                 {
-                    if (currentObject.PlacedObject.GetType().IsSubclassOf(typeof(InteractablePlacedObject)))
+                    if (currentObject.PlacedObject.GetType().Equals(typeof(InteractablePlacedObject)) || 
+                        currentObject.PlacedObject.GetType().IsSubclassOf(typeof(InteractablePlacedObject)))
                     {
                         ((InteractablePlacedObject)currentObject.PlacedObject).Interact(this);
                     }

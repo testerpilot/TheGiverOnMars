@@ -37,6 +37,22 @@ namespace TheGiverOnMars.Components.Item.Base
         public abstract void OnUse(Player player);
     }
 
+    public class PlaceableItem : ActionItem
+    {
+        public int PlacedObjecttId;
+
+        public override void OnUse(Player player) => OnUsePlaceable(player);
+
+        protected virtual void OnUsePlaceable(Player player)
+        { 
+        }
+
+        public void Place(Vector2 position)
+        {
+            MapManager.CurrentMap.Spawn(PlacedObjecttId, position);
+        }
+    }
+
     /// <summary>
     /// Class for item that is consumed on use (hence inheriting ActionItem)
     /// </summary>

@@ -15,6 +15,7 @@ using TheGiverOnMars.Components.Item.Base;
 using TheGiverOnMars.Components.Item.Definitions;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
+using static TheGiverOnMars.Components.InputWrapper;
 
 namespace TheGiverOnMars.States
 {
@@ -28,6 +29,20 @@ namespace TheGiverOnMars.States
         {
             SpriteManager.LoadSprites();
             TileManager.LoadTiles();
+
+            Constants.Input = new InputWrapper()
+            {
+                Up = new KeyWrapper(Keys.Up),
+                Down = new KeyWrapper(Keys.Down),
+                Left = new KeyWrapper(Keys.Left),
+                Right = new KeyWrapper(Keys.Right),
+                ToggleInventory = new KeyWrapper(Keys.Tab),
+                ShiftLeftInventory = new KeyWrapper(Keys.Q),
+                ShiftRightInventory = new KeyWrapper(Keys.E),
+                Interact = new KeyWrapper(Keys.C),
+                Use = new KeyWrapper(Keys.V),
+                Save = new KeyWrapper(Keys.Z)
+            };
 
             if (save != null)
             {
@@ -77,19 +92,23 @@ namespace TheGiverOnMars.States
 
         public override void Update(GameTime gameTime)
         {
+            Constants.NewKeyState = Keyboard.GetState();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Constants.Game.Exit();
 
             // TODO: Add your update logic here
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Z))
+            if (Constants.Input.Save.IsJustPressed())
                 Save();
 
-            MapManager.CurrentMap.Update();
+            MapManager.CurrentMap.Update(gameTime);
 
             _player.Update(gameTime, MapManager.CurrentMap);
             _camera.Follow(_player.Tile);
             Constants.SceneManager.Update(gameTime, Constants.SpriteBatch, _player.Tile.Position);
+
+            Constants.CurrKeyState = Constants.NewKeyState;
         }
     }
 }

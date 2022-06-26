@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TheGiverOnMars.Components.Item.Base;
@@ -10,6 +11,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
     public class Chest : InteractablePlacedObjectWithDrop
     {
         public Inventory Inventory;
+        public int _health = 4;
 
         public Chest()
         {
@@ -57,10 +59,26 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             return tupleList;
         }
 
-        public override List<string> BreakableWith() =>
-            new List<string>()
+        public override Dictionary<string, int> BreakableWith() =>
+            new Dictionary<string, int>()
             {
-                "Pickaxe"
+                { "Pickaxe", 2 }
             };
+
+        public override void SubtractHealth(int damage)
+        {
+            _health -= damage;
+        }
+
+        public override int Health() => _health;
+
+        public override void Update(GameTime gameTime, SpriteTile tile)
+        {
+        }
+
+        public override PlacedObject DeepCopy()
+        {
+            return new Chest();
+        }
     }
 }

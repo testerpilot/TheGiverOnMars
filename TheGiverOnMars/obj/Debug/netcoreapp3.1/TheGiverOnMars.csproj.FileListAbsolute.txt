@@ -46,3 +46,5 @@ C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\C
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Pickaxe.xnb
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Furnace.xnb
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Furnance.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\FurnanceProcessing.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\FurnaceProcessing.xnb

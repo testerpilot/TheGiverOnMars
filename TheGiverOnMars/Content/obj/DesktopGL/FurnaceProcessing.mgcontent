@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Copper/CopperNode.png</SourceFile>
-  <SourceTime>2022-06-22T18:38:45.6509835-05:00</SourceTime>
-  <DestFile>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/bin/DesktopGL/Copper/CopperNode.xnb</DestFile>
-  <DestTime>2022-06-25T18:02:53.0952978-05:00</DestTime>
+  <SourceFile>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/FurnanceDone.png</SourceFile>
+  <SourceTime>2022-06-25T18:01:03.9705082-05:00</SourceTime>
+  <DestFile>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/bin/DesktopGL/FurnaceProcessing.xnb</DestFile>
+  <DestTime>2022-06-25T18:02:53.1892965-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T11:17:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

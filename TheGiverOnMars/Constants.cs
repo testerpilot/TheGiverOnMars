@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TheGiverOnMars.Components;
 using TheGiverOnMars.Managers;
 
 namespace TheGiverOnMars
@@ -24,5 +26,9 @@ namespace TheGiverOnMars
         public static SceneManager SceneManager;
 
         public static SpriteFont InventoryStackFont { get; set; }
+
+        public static KeyboardState CurrKeyState { get; set; }
+        public static KeyboardState NewKeyState { get; set; }
+        public static InputWrapper Input { get; set; }
     }
 }

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using TheGiverOnMars.Components;
 using TheGiverOnMars.Components.Item.Base;
+using TheGiverOnMars.Components.PlacedObject;
+using TheGiverOnMars.Dictionaries;
 using TheGiverOnMars.Objects;
 
 using Items = TheGiverOnMars.Components.Item.Definitions;
@@ -36,6 +38,11 @@ namespace TheGiverOnMars.Managers
         public bool IsSelectedTileInOtherInv = false;
         public bool? IsSelectedTileForMoveInOtherInv = null;
 
+        public bool IsOnPlaceableItem = false;
+        public bool PlaceObjectBlocked = false;
+        public PlacedObjectInstance TemporaryPlacedObjectInstance = null;
+
+
         public List<Keys> AssociatedKeys = new List<Keys>()
         {
             Keys.D1,
@@ -55,14 +62,9 @@ namespace TheGiverOnMars.Managers
 
         public Inventory InventoryInteractingWith = null;
 
-        public KeyboardState OldKeyboardState;
-        public MouseState OldMouseState;
-
         // Used for positioning
         public const int GuiOffset = (10 * 68) / 2;
         public float PlayerOffsetX, PlayerOffsetY;
-
-        //public Tile InvSpaceTileOnMenuGui;
 
         public InventoryManager(Inventory inventory, Tile playerTile)
         {
@@ -221,12 +223,28 @@ namespace TheGiverOnMars.Managers
                     }
                 }
             }
+
+            if (IsOnPlaceableItem)
+            {
+                Color color;
+
+                if (MapManager.CurrentMap.CollisionRects.Exists(x => x.Position == TemporaryPlacedObjectInstance.Tile.Position))
+                {
+                    color = Color.Red;
+                    PlaceObjectBlocked = true;
+                }
+                else
+                {
+                    color = Color.LightBlue;
+                    PlaceObjectBlocked = false;
+                }
+
+                TemporaryPlacedObjectInstance.Tile.Draw(spriteBatch, color * 0.6f);
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
-            var newKeyboardState = Keyboard.GetState();
-
             // Update position
             PlayerOffsetX = PlayerTile.Position.X;
             PlayerOffsetY = PlayerTile.Position.Y + 418;
@@ -240,7 +258,7 @@ namespace TheGiverOnMars.Managers
                     Inventory.Spaces[i].SpriteTile.Position = new Vector2(PlayerOffsetX + (i * 68) - GuiOffset, PlayerOffsetY);
                 }
 
-                if (newKeyboardState.IsKeyDown(AssociatedKeys[i]) & !OldKeyboardState.IsKeyDown(AssociatedKeys[i]))
+                if (Constants.NewKeyState.IsKeyDown(AssociatedKeys[i]) & !Constants.CurrKeyState.IsKeyDown(AssociatedKeys[i]))
                 {
                     SelectedTile = i;
                 }
@@ -254,7 +272,7 @@ namespace TheGiverOnMars.Managers
                     SelectedTile %= 10;
                 }
 
-                if (newKeyboardState.IsKeyDown(Keys.E) & !OldKeyboardState.IsKeyDown(Keys.E))
+                if (Constants.Input.ShiftRightInventory.IsJustPressed())
                 {
                     if (SelectedTile == 9)
                     {
@@ -266,7 +284,7 @@ namespace TheGiverOnMars.Managers
                     }
                 }
 
-                else if (newKeyboardState.IsKeyDown(Keys.Q) & !OldKeyboardState.IsKeyDown(Keys.Q))
+                else if (Constants.Input.ShiftLeftInventory.IsJustPressed())
                 {
                     if (SelectedTile == 0)
                     {
@@ -280,7 +298,7 @@ namespace TheGiverOnMars.Managers
             }
             else if (IsInventoryOpen)
             {
-                if (newKeyboardState.IsKeyDown(Keys.Up) & !OldKeyboardState.IsKeyDown(Keys.Up))
+                if (Constants.Input.Up.IsJustPressed())
                 {
                     if (SelectedTile < 20)
                     {
@@ -296,7 +314,7 @@ namespace TheGiverOnMars.Managers
                         }
                     }
                 }
-                else if (newKeyboardState.IsKeyDown(Keys.Down) & !OldKeyboardState.IsKeyDown(Keys.Down))
+                else if (Constants.Input.Down.IsJustPressed())
                 {
                     if (SelectedTile >= 10)
                     {
@@ -312,7 +330,7 @@ namespace TheGiverOnMars.Managers
                         }
                     }
                 }
-                else if ((newKeyboardState.IsKeyDown(Keys.Left) & !OldKeyboardState.IsKeyDown(Keys.Left)) || (newKeyboardState.IsKeyDown(Keys.Q) & !OldKeyboardState.IsKeyDown(Keys.Q)))
+                else if (Constants.Input.Left.IsJustPressed() || Constants.Input.ShiftLeftInventory.IsJustPressed())
                 {
                     var mod = SelectedTile % 10;
 
@@ -325,7 +343,7 @@ namespace TheGiverOnMars.Managers
                         SelectedTile += 9;
                     }
                 }
-                else if ((newKeyboardState.IsKeyDown(Keys.Right) & !OldKeyboardState.IsKeyDown(Keys.Right)) || (newKeyboardState.IsKeyDown(Keys.E) & !OldKeyboardState.IsKeyDown(Keys.E)))
+                else if (Constants.Input.Right.IsJustPressed() || Constants.Input.ShiftRightInventory.IsJustPressed())
                 {
                     var mod = SelectedTile % 10;
 
@@ -339,7 +357,7 @@ namespace TheGiverOnMars.Managers
                     }
                 }
 
-                if (newKeyboardState.IsKeyDown(Keys.C) & !OldKeyboardState.IsKeyDown(Keys.C))
+                if (Constants.Input.Interact.IsJustPressed())
                 {
                     if (SelectedTileForMove == null && (Inventory.Spaces[SelectedTile].HasValue || (IsSelectedTileInOtherInv && InventoryInteractingWith.Spaces[SelectedTile].HasValue)))
                     {
@@ -439,8 +457,25 @@ namespace TheGiverOnMars.Managers
                 }
             }
 
+            if (!IsInventoryOpen && Inventory.Spaces[SelectedTile].HasValue &&
+                Inventory.Spaces[SelectedTile].ItemInterfaced.GetType().IsSubclassOf(typeof(PlaceableItem)))
+            {
+                IsOnPlaceableItem = true;
+
+                if (TemporaryPlacedObjectInstance == null)
+                {
+                    var placeableItem = (PlaceableItem)Inventory.Spaces[SelectedTile].ItemInterfaced;
+                    TemporaryPlacedObjectInstance = new PlacedObjectInstance(PlacedObjectDictionary.Dictionary[placeableItem.PlacedObjecttId]);
+                }
+            }
+            else
+            {
+                IsOnPlaceableItem = false;
+                TemporaryPlacedObjectInstance = null;
+            }
+
             // Open and close Inventory GUI
-            if (!BlockOpen && newKeyboardState.IsKeyDown(Keys.R) && !OldKeyboardState.IsKeyDown(Keys.R))
+            if (!BlockOpen && Constants.Input.ToggleInventory.IsJustPressed())
             {
                 if (IsInventoryOpen)
                 {
@@ -452,8 +487,6 @@ namespace TheGiverOnMars.Managers
 
                 IsInventoryOpen = !IsInventoryOpen;
             }
-
-            OldKeyboardState = newKeyboardState;
         }
     }
 }

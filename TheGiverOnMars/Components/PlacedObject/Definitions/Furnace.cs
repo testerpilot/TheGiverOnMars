@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +12,33 @@ using Items = TheGiverOnMars.Components.Item.Definitions;
 
 namespace TheGiverOnMars.Components.PlacedObject.Definitions
 {
+    public enum FurnanceState { Idle, Processing, Done }
+
     public class Furnace : InteractablePlacedObjectWithDrop
     {
-        List<SimpleContract> Contracts = new List<SimpleContract>()
+        List<TimedContract> Contracts = new List<TimedContract>()
         {
-            new SimpleContract()
-            { 
+            new TimedContract()
+            {
                 Requirement = (new Items.CopperOre(), 3),
-                Promise = (new Items.CopperBar(), 1)
+                Promise = (new Items.CopperBar(), 1),
+                SecondsToFulfill = 10
             }
         };
+
+        public int _health = 4;
+        public TimedContract CurrentContract;
+        public double? TimeLeft = null;
+        public FurnanceState State = FurnanceState.Idle; 
+
+        public Dictionary<FurnanceState, Texture2D> Textures = new Dictionary<FurnanceState, Texture2D>()
+        {
+            { FurnanceState.Idle, SpriteManager.GetSpriteFromDict(17) },
+            { FurnanceState.Processing, SpriteManager.GetSpriteFromDict(18) },
+            { FurnanceState.Done, SpriteManager.GetSpriteFromDict(17) }
+        };
+
+        public Texture2D CurrentTexture = SpriteManager.GetSpriteFromDict(17); 
 
         public Furnace()
         {
@@ -27,57 +46,123 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             TileID = 28;
         }
 
-        public override List<string> BreakableWith() =>
-            new List<string>()
+        public override Dictionary<string, int> BreakableWith() =>
+            new Dictionary<string, int>()
             {
-                "Pickaxe"
+                { "Pickaxe", 2 }
             };
+
+        public override void SubtractHealth(int damage)
+        {
+            _health -= damage;
+        }
+
+        public override int Health() => _health;
 
         public override void Interact(Player player)
         {
-            var selectedSpace = player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile];
-
-            if (selectedSpace.HasValue)
+            if (State == FurnanceState.Idle)
             {
-                var appliedContract = Contracts.FirstOrDefault(x => x.Requirement.Item1.Name.Equals(selectedSpace.ItemInterfaced.Name));
+                var selectedSpace = player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile];
 
-                if (appliedContract == null)
+                if (selectedSpace.HasValue)
                 {
-                    return;
-                }
+                    var appliedContract = Contracts.FirstOrDefault(x => x.Requirement.Item1.Name.Equals(selectedSpace.ItemInterfaced.Name));
 
-                if (selectedSpace.ItemInterfaced.IsStackable)
-                {
-                    var stack = ((StackInventorySpace)selectedSpace).ItemStack;
-
-                    if (stack.Count < appliedContract.Requirement.Item2)
+                    if (appliedContract == null)
                     {
                         return;
                     }
 
-                    stack.Count -= appliedContract.Requirement.Item2;
-
-                    if (stack.Count > 0)
+                    if (selectedSpace.ItemInterfaced.IsStackable)
                     {
-                        player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile] = new StackInventorySpace(stack);
+                        var stack = ((StackInventorySpace)selectedSpace).ItemStack;
+
+                        if (stack.Count < appliedContract.Requirement.Item2)
+                        {
+                            return;
+                        }
+
+                        stack.Count -= appliedContract.Requirement.Item2;
+
+                        if (stack.Count > 0)
+                        {
+                            player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile] = new StackInventorySpace(stack);
+                        }
+                        else
+                        {
+                            player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile] = new InventorySpace(false);
+                        }
                     }
                     else
                     {
                         player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile] = new InventorySpace(false);
                     }
-                }
-                else
-                {
-                    player.InventoryManager.Inventory.Spaces[player.InventoryManager.SelectedTile] = new InventorySpace(false);
-                }
 
-                MapManager.CurrentMap.Spawn(appliedContract.Promise.Item1, player.Tile.Position, appliedContract.Promise.Item2);
+                    CurrentContract = appliedContract;
+                    TimeLeft = CurrentContract.SecondsToFulfill;
+                    State = FurnanceState.Processing;
+                    CurrentTexture = Textures[FurnanceState.Processing];
+                }
+            }
+
+            else if (State == FurnanceState.Done)
+            {
+                MapManager.CurrentMap.Spawn(CurrentContract.Promise.Item1, player.Tile.Position, CurrentContract.Promise.Item2);
+
+                CurrentContract = null;
+                TimeLeft = null;
+                State = FurnanceState.Idle;
+                CurrentTexture = Textures[FurnanceState.Idle];
             }
         }
 
         public override List<(Item.Base.Item, int)> ItemIdAndQuantityOnDrop()
         {
-            return null;        
+            var list = new List<(Item.Base.Item, int)>();
+
+            if (CurrentContract != null)
+            {
+                list.Add(CurrentContract.Requirement);
+            }
+
+            return list; 
+        }
+
+        public override void Update(GameTime gameTime, SpriteTile tile)
+        {
+            if (State == FurnanceState.Processing)
+            {
+                TimeLeft -= gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (TimeLeft <= 0)
+            {
+                State = FurnanceState.Done;
+                CurrentTexture = Textures[FurnanceState.Done];
+                TimeLeft = null;
+            }
+
+            if (!tile._texture.Equals(CurrentTexture))
+            {
+                tile._texture = CurrentTexture;
+            }
+        }
+
+        public override PlacedObject DeepCopy()
+        {
+            var temp = new Furnace
+            {
+                _health = _health,
+                CurrentContract = CurrentContract,
+                State = State,
+                Name = Name,
+                TileID = TileID,
+                TimeLeft = TimeLeft,
+                CurrentTexture = CurrentTexture
+            };
+
+            return temp;
         }
     }
 }

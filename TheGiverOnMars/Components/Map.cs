@@ -87,7 +87,7 @@ namespace TheGiverOnMars.Objects
                 }
                 else
                 {
-                    instance = new PlacedObjectInstance(PlacedObjectDictionary.Dictionary[placedObject.ObjectId]);
+                    instance = new PlacedObjectInstance(PlacedObjectDictionary.Dictionary[placedObject.ObjectId].DeepCopy());
                 }
 
                 instance.Tile.Position = placedObject.Position * 64;
@@ -109,8 +109,22 @@ namespace TheGiverOnMars.Objects
             }
         }
 
-        public void Update()
+        public void Spawn(int placedObjectId, Vector2 position)
         {
+            var instance = new PlacedObjectInstance(PlacedObjectDictionary.Dictionary[placedObjectId]);
+            instance.Tile.PositionOnMap = position;
+
+            PlacedObjects.Add(instance);
+            CollisionRects.Add((CollisionTile)instance.Tile);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            foreach (var placedObject in PlacedObjects)
+            {
+                placedObject.Update(gameTime);
+            }
+
             if (PlacedObjectForRemoval != null)
             {
                 PlacedObjects.Remove(PlacedObjectForRemoval);

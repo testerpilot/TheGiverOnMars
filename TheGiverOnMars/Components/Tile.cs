@@ -14,6 +14,18 @@ namespace TheGiverOnMars.Objects
 
         public int OffsetX = 0, OffsetY = 0;
         public int CollisionWidth = 64, CollisionHeight = 54;
+        
+        public Vector2 PositionOnMap
+        {
+            get
+            {
+                return new Vector2(MathF.Floor(Position.X / 64), MathF.Floor(Position.Y / 64));
+            }
+            set
+            {
+                Position = value * 64;
+            }
+        }
 
         public Point Center
         {

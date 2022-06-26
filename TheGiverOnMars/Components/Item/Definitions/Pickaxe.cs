@@ -29,18 +29,18 @@ namespace TheGiverOnMars.Components.Item.Definitions
                 {
                     var breakableObject = (BreakablePlacedObject)currentObject.PlacedObject;
 
-                    if (breakableObject.BreakableWith.Contains(Name))
+                    if (breakableObject.BreakableWith.ContainsKey(Name))
                     {
-                        currentObject.Break();
+                        currentObject.Break(Name);
                     }
                 }
                 else
                 {
                     var breakableObject = (BreakableInteractablePlacedObject)currentObject.PlacedObject;
 
-                    if (breakableObject.BreakableWith().Contains(Name))
+                    if (breakableObject.BreakableWith().ContainsKey(Name))
                     {
-                        currentObject.Break();
+                        currentObject.Break(Name);
                     }
                 }
             }
