@@ -4,15 +4,21 @@ using System.Text;
 
 namespace TheGiverOnMars.Components.Item.Base
 {
-    public class SimpleContract
+    public class ContractElement
     {
-        public (Item, int) Requirement;
-        public (Item, int) Promise;
+        public Item Item { get; set; }
+        public int Quantity { get; set; }
     }
 
-    public class TimedContract : SimpleContract
+    public class SimpleContract
+    { 
+        public ContractElement Requirement { get; set; }
+        public ContractElement Promise { get; set; }
+    }
+
+    public class TimedSimpleContract : SimpleContract
     {
-        public int SecondsToFulfill;
+        public int SecondsToFulfill { get; set; }
     }
 
     /// <summary>
@@ -21,8 +27,8 @@ namespace TheGiverOnMars.Components.Item.Base
     /// </summary>
     public class Contract
     {
-        public List<(Item, int)> Requirement;
-        public List<(Item, int)> Promise;
+        public List<ContractElement> Requirement { get; set; }
+        public List<ContractElement> Promise { get; set; }
     }
 
     public class TimeContract : Contract

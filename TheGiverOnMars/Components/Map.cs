@@ -88,6 +88,11 @@ namespace TheGiverOnMars.Objects
                 else
                 {
                     instance = new PlacedObjectInstance(PlacedObjectDictionary.Dictionary[placedObject.ObjectId].DeepCopy());
+
+                    if (placedObject.Data_ != null)
+                    {
+                        instance.PlacedObject.Parse(placedObject.Data_);
+                    }
                 }
 
                 instance.Tile.Position = placedObject.Position * 64;

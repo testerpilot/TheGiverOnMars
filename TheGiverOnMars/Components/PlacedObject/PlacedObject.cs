@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
 using BaseItem = TheGiverOnMars.Components.Item.Base;
@@ -13,8 +14,8 @@ namespace TheGiverOnMars.Components.PlacedObject
     /// </summary>
     public class PlacedObject
     {
-        public int TileID;
-        public string Name;
+        public int TileID { get; set; }
+        public string Name { get; set; }
 
         public virtual PlacedObject DeepCopy()
         {
@@ -25,29 +26,58 @@ namespace TheGiverOnMars.Components.PlacedObject
 
             return temp;
         }
+
+        public virtual string Serialize()
+        {
+            return JsonSerializer.Serialize(this);
+        }
+
+        public virtual void Parse(string data)
+        {
+            var temp = JsonSerializer.Deserialize<PlacedObject>(data);
+
+            TileID = temp.TileID;
+            Name = temp.Name;
+        }
     }
 
     public class BreakablePlacedObject : PlacedObject
     {
-        public Dictionary<string, int> BreakableWith = new Dictionary<string, int>();
-        public int Health;
+        public Dictionary<string, int> BreakableWith { get; set; } = new Dictionary<string, int>();
+        public int Health { get; set; }
 
         public override PlacedObject DeepCopy()
         {
-            var temp = new BreakablePlacedObject();
-
-            temp.Health = Health;
-            temp.BreakableWith = BreakableWith;
-            temp.Name = Name;
-            temp.TileID = TileID;
+            var temp = new BreakablePlacedObject
+            {
+                Health = Health,
+                BreakableWith = BreakableWith,
+                Name = Name,
+                TileID = TileID
+            };
 
             return temp;
+        }
+
+        public override string Serialize()
+        {
+            return JsonSerializer.Serialize(this);
+        }
+
+        public override void Parse(string data)
+        {
+            var temp = JsonSerializer.Deserialize<BreakablePlacedObject>(data);
+
+            TileID = temp.TileID;
+            Name = temp.Name;
+            Health = temp.Health;
+            BreakableWith = temp.BreakableWith;
         }
     }
 
     public class PlacedObjectWithDrop : BreakablePlacedObject
     {
-        public List<(BaseItem.Item, int)> ItemIdAndQuantity = new List<(BaseItem.Item, int)>();
+        public List<(BaseItem.Item, int)> ItemIdAndQuantity { get; set; } = new List<(BaseItem.Item, int)>();
 
         public override PlacedObject DeepCopy()
         {
@@ -61,6 +91,44 @@ namespace TheGiverOnMars.Components.PlacedObject
 
             return temp;
         }
+
+        public override string Serialize()
+        {
+            return JsonSerializer.Serialize(this);
+        }
+
+        public override void Parse(string data)
+        {
+            var temp = JsonSerializer.Deserialize<PlacedObjectWithDrop>(data);
+
+            ItemIdAndQuantity = temp.ItemIdAndQuantity;
+            TileID = temp.TileID;
+            Name = temp.Name;
+            Health = temp.Health;
+            BreakableWith = temp.BreakableWith;
+        }
+    }
+
+    public abstract class InteractablePlacedObject : PlacedObject
+    {
+        public abstract void Interact(Player player);
+
+        // Object may want to update texture based on state
+        public abstract void Update(GameTime gameTime, SpriteTile tile);
+
+        public override abstract PlacedObject DeepCopy();
+    }
+
+    public abstract class BreakableInteractablePlacedObject : InteractablePlacedObject
+    {
+        public abstract Dictionary<string, int> BreakableWith();
+        public abstract void SubtractHealth(int damage);
+        public abstract int Health();
+    }
+
+    public abstract class InteractablePlacedObjectWithDrop : BreakableInteractablePlacedObject
+    {
+        public abstract List<(BaseItem.Item, int)> ItemIdAndQuantityOnDrop();
     }
 
     public class PlacedObjectInstance
@@ -140,27 +208,5 @@ namespace TheGiverOnMars.Components.PlacedObject
             }
         }
 
-    }
-
-    public abstract class InteractablePlacedObject : PlacedObject
-    {
-        public abstract void Interact(Player player);
-
-        // Object may want to update texture based on state
-        public abstract void Update(GameTime gameTime, SpriteTile tile);
-
-        public override abstract PlacedObject DeepCopy();
-    }
-
-    public abstract class BreakableInteractablePlacedObject : InteractablePlacedObject
-    {
-        public abstract Dictionary<string, int> BreakableWith();
-        public abstract void SubtractHealth(int damage);
-        public abstract int Health();
-    }
-
-    public abstract class InteractablePlacedObjectWithDrop : BreakableInteractablePlacedObject
-    {
-        public abstract List<(BaseItem.Item, int)> ItemIdAndQuantityOnDrop();
     }
 }

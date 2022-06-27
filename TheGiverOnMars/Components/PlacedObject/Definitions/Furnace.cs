@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using TheGiverOnMars.Components.Item.Base;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
@@ -16,20 +19,28 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
 
     public class Furnace : InteractablePlacedObjectWithDrop
     {
-        List<TimedContract> Contracts = new List<TimedContract>()
+        private List<TimedSimpleContract> Contracts = new List<TimedSimpleContract>()
         {
-            new TimedContract()
+            new TimedSimpleContract()
             {
-                Requirement = (new Items.CopperOre(), 3),
-                Promise = (new Items.CopperBar(), 1),
+                Requirement = new ContractElement()
+                {
+                    Item = new Items.CopperOre(),
+                    Quantity = 3
+                },
+                Promise = new ContractElement()
+                {
+                    Item = new Items.CopperBar(),
+                    Quantity = 1
+                },
                 SecondsToFulfill = 10
             }
         };
 
-        public int _health = 4;
-        public TimedContract CurrentContract;
-        public double? TimeLeft = null;
-        public FurnanceState State = FurnanceState.Idle; 
+        public int Health_ { get; set; } = 4;
+        public TimedSimpleContract CurrentContract { get; set; }
+        public double? TimeLeft { get; set; } = null;
+        public FurnanceState State { get; set; } = FurnanceState.Idle; 
 
         public Dictionary<FurnanceState, Texture2D> Textures = new Dictionary<FurnanceState, Texture2D>()
         {
@@ -38,7 +49,16 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             { FurnanceState.Done, SpriteManager.GetSpriteFromDict(17) }
         };
 
-        public Texture2D CurrentTexture = SpriteManager.GetSpriteFromDict(17); 
+        public Texture2D CurrentTexture = SpriteManager.GetSpriteFromDict(17);
+
+        public PointLight Light { get; set; } = new PointLight()
+        {
+            Color = Color.Orange,
+            Radius = 100,
+            Intensity = 1f,
+            Enabled = true,
+            Scale = new Vector2(500, 500)
+        };
 
         public Furnace()
         {
@@ -54,10 +74,10 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
 
         public override void SubtractHealth(int damage)
         {
-            _health -= damage;
+            Health_ -= damage;
         }
 
-        public override int Health() => _health;
+        public override int Health() => Health_;
 
         public override void Interact(Player player)
         {
@@ -67,7 +87,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
 
                 if (selectedSpace.HasValue)
                 {
-                    var appliedContract = Contracts.FirstOrDefault(x => x.Requirement.Item1.Name.Equals(selectedSpace.ItemInterfaced.Name));
+                    var appliedContract = Contracts.FirstOrDefault(x => x.Requirement.Item.Name.Equals(selectedSpace.ItemInterfaced.Name));
 
                     if (appliedContract == null)
                     {
@@ -78,12 +98,12 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
                     {
                         var stack = ((StackInventorySpace)selectedSpace).ItemStack;
 
-                        if (stack.Count < appliedContract.Requirement.Item2)
+                        if (stack.Count < appliedContract.Requirement.Quantity)
                         {
                             return;
                         }
 
-                        stack.Count -= appliedContract.Requirement.Item2;
+                        stack.Count -= appliedContract.Requirement.Quantity;
 
                         if (stack.Count > 0)
                         {
@@ -103,12 +123,13 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
                     TimeLeft = CurrentContract.SecondsToFulfill;
                     State = FurnanceState.Processing;
                     CurrentTexture = Textures[FurnanceState.Processing];
+                    Constants.Penumbra.Lights.Add(Light);
                 }
             }
 
             else if (State == FurnanceState.Done)
             {
-                MapManager.CurrentMap.Spawn(CurrentContract.Promise.Item1, player.Tile.Position, CurrentContract.Promise.Item2);
+                MapManager.CurrentMap.Spawn(CurrentContract.Promise.Item, player.Tile.Position, CurrentContract.Promise.Quantity);
 
                 CurrentContract = null;
                 TimeLeft = null;
@@ -123,7 +144,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
 
             if (CurrentContract != null)
             {
-                list.Add(CurrentContract.Requirement);
+                list.Add((CurrentContract.Promise.Item, CurrentContract.Promise.Quantity));
             }
 
             return list; 
@@ -131,6 +152,11 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
 
         public override void Update(GameTime gameTime, SpriteTile tile)
         {
+            if (Light.Position != tile.Position)
+            {
+                Light.Position = tile.Center.ToVector2();
+            }
+
             if (State == FurnanceState.Processing)
             {
                 TimeLeft -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -140,6 +166,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             {
                 State = FurnanceState.Done;
                 CurrentTexture = Textures[FurnanceState.Done];
+                Constants.Penumbra.Lights.Remove(Light);
                 TimeLeft = null;
             }
 
@@ -153,7 +180,7 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
         {
             var temp = new Furnace
             {
-                _health = _health,
+                Health_ = Health_,
                 CurrentContract = CurrentContract,
                 State = State,
                 Name = Name,
@@ -163,6 +190,28 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             };
 
             return temp;
+        }
+
+        public override string Serialize()
+        {
+            return JsonSerializer.Serialize(this);
+        }
+
+        public override void Parse(string data)
+        {
+            var temp = JsonSerializer.Deserialize<Furnace>(data);
+
+            Health_ = temp.Health_;
+            CurrentContract = temp.CurrentContract;
+            TimeLeft = temp.TimeLeft;
+            State = temp.State;
+            CurrentTexture = Textures[State];
+            Light = Light;
+
+            if (State == FurnanceState.Processing)
+            {
+                Constants.Penumbra.Lights.Add(Light);
+            }
         }
     }
 }

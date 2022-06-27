@@ -27,6 +27,7 @@ namespace TheGiverOnMars.Dictionaries
             public float PosX { get; set; }
             public float PosY { get; set; }
             public int ObjectId { get; set; }
+            public string Data_ { get; set; }
 
             [JsonIgnore]
             public Vector2 Position

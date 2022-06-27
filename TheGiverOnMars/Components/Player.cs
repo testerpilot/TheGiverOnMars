@@ -255,7 +255,6 @@ namespace TheGiverOnMars.Objects
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(AnimatedSprite, Tile.Position);
-            InventoryManager.Draw(null, spriteBatch);
         }
     }
 }

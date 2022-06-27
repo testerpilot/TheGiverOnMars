@@ -55,10 +55,13 @@ namespace TheGiverOnMars.Managers
                 }
                 else
                 {
+                    var data = instance.PlacedObject.Serialize();
+
                     TempMapDictionary[index].PlacedObjectEntries.Add(new MapDictionaryEntry.PlacedObjectEntry()
                     {
                         Position = instance.Tile.Position / 64,
-                        ObjectId = PlacedObjectDictionary.Dictionary.FirstOrDefault(x => x.Value.Name == instance.PlacedObject.Name).Key
+                        ObjectId = PlacedObjectDictionary.Dictionary.FirstOrDefault(x => x.Value.Name == instance.PlacedObject.Name).Key,
+                        Data_ = data
                     });
                 }
             }

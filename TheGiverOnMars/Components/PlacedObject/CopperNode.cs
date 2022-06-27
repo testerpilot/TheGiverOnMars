@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using TheGiverOnMars.Dictionaries;
 
 namespace TheGiverOnMars.Components.PlacedObject
@@ -18,6 +19,11 @@ namespace TheGiverOnMars.Components.PlacedObject
             {
                 { "Pickaxe", 2 }
             };
-        }   
+        }
+
+        public override string Serialize()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

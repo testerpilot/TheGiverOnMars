@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
+using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,58 @@ namespace TheGiverOnMars.States
         {
             SpriteManager.LoadSprites();
             TileManager.LoadTiles();
+            Constants.Penumbra = new Penumbra.PenumbraComponent(Constants.Game);
+            Constants.Penumbra.Initialize();
+
+            Constants.Penumbra.Lights.Add(new PointLight()
+            {
+                Position = new Vector2(500, 500),
+                Enabled = true,
+                Color = Color.DeepSkyBlue,
+                Radius = 200,
+                Scale = new Vector2(1000, 1000),
+                Intensity = 0.5f
+            });
+
+            Constants.Penumbra.Lights.Add(new PointLight()
+            {
+                Position = new Vector2(50, 500),
+                Enabled = true,
+                Color = Color.DarkCyan,
+                Radius = 200,
+                Scale = new Vector2(1000, 1000),
+                Intensity = 0.5f
+            });
+
+            Constants.Penumbra.Lights.Add(new PointLight()
+            {
+                Position = new Vector2(950, 500),
+                Enabled = true,
+                Color = Color.OrangeRed,
+                Radius = 200,
+                Scale = new Vector2(1000, 1000),
+                Intensity = 0.5f
+            });
+
+            Constants.Penumbra.Lights.Add(new PointLight()
+            {
+                Position = new Vector2(500, 250),
+                Enabled = true,
+                Color = Color.Violet,
+                Radius = 200,
+                Scale = new Vector2(1000, 1000),
+                Intensity = 0.5f
+            });
+
+            Constants.Penumbra.Lights.Add(new PointLight()
+            {
+                Position = new Vector2(500, 900),
+                Enabled = true,
+                Color = Color.ForestGreen,
+                Radius = 200,
+                Scale = new Vector2(1000, 1000),
+                Intensity = 1f
+            });
 
             Constants.Input = new InputWrapper()
             {
@@ -74,6 +127,10 @@ namespace TheGiverOnMars.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            Constants.Penumbra.BeginDraw();
+
+            Constants.Penumbra.Transform = _camera.Transform;
+
             spriteBatch.Begin(transformMatrix: _camera.Transform);
 
             MapManager.CurrentMap.Draw(spriteBatch);
@@ -81,6 +138,14 @@ namespace TheGiverOnMars.States
             _player.Draw(spriteBatch);
 
             Constants.SceneManager.Draw(spriteBatch, _player.Tile.Position);
+
+            spriteBatch.End();
+
+            Constants.Penumbra.Draw(gameTime);
+
+            spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+            _player.InventoryManager.Draw(null, spriteBatch);
 
             spriteBatch.End();
         }
@@ -92,6 +157,8 @@ namespace TheGiverOnMars.States
 
         public override void Update(GameTime gameTime)
         {
+            Constants.Penumbra.Update(gameTime);
+
             Constants.NewKeyState = Keyboard.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))

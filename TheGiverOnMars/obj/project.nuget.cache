@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sHkrk8djct44/KBhFgQWcGoBwkgljrFqQnfYJEYGCpKnkKA6v1C+hANa/2vkLMT2s8TdeSOykytJ1mxod1s16g==",
+  "dgSpecHash": "F4ng0CrlI0b1zvG/2HuYlI1amphx1alhnSIeLhv9+OsJHEs2YzIyop2eycDobWdoCrUnXCwDg2lS2pNOG4DhPw==",
   "success": true,
   "projectFilePath": "C:\\Users\\rexxs\\Documents\\TheGiverOnMars\\TheGiverOnMars\\TheGiverOnMars.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\rexxs\\.nuget\\packages\\monogame.extended\\3.8.0\\monogame.extended.3.8.0.nupkg.sha512",
     "C:\\Users\\rexxs\\.nuget\\packages\\monogame.extended.collisions\\3.8.0\\monogame.extended.collisions.3.8.0.nupkg.sha512",
     "C:\\Users\\rexxs\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512",
+    "C:\\Users\\rexxs\\.nuget\\packages\\monogame.penumbra.desktopgl\\2.1.0\\monogame.penumbra.desktopgl.2.1.0.nupkg.sha512",
     "C:\\Users\\rexxs\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
   ],
   "logs": []
