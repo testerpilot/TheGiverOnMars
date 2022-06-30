@@ -12,7 +12,10 @@ namespace TheGiverOnMars.Dictionaries
         {
             { 0, new Chest() },
             { 1, new CopperNode() },
-            { 2, new Furnace() }
+            { 2, new Furnace() },
+            { 3, new IronNode() },
+            { 4, new GoldNode() },
+            { 5, new TinNode() }
         };
     }
 }

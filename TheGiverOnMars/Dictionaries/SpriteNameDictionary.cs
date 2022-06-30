@@ -24,7 +24,18 @@ namespace TheGiverOnMars.Dictionaries
             { 15, "Chest" },
             { 16, "Pickaxe" },
             { 17, "Furnace" },
-            { 18, "FurnaceProcessing" }
+            { 18, "FurnaceProcessing" },
+            { 19, "Black" },
+            { 20, "Tin/TinOre" },
+            { 21, "Tin/TinBar" },
+            { 22, "Tin/TinNode" },
+            { 23, "Gold/GoldOre" },
+            { 24, "Gold/GoldBar" },
+            { 25, "Gold/GoldNode" },
+            { 27, "Bronze/BronzeBar" },
+            { 29, "Iron/IronNode" },
+            { 30, "Steel/SteelBar" },
+            { 31, "Arrow" }
         };
     }
 }

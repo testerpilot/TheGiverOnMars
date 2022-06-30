@@ -47,6 +47,17 @@ namespace TheGiverOnMars.Dictionaries
             new TileDictEntry(26, 15, true, "Chest"),
             new TileDictEntry(27, 16, false, "Pickaxe"),
             new TileDictEntry(28, 17, true, "Furnace"),
+            new TileDictEntry(29, 19, true, "Black"),
+            new TileDictEntry(30, 20, false, "TinOre", isStatic: true),
+            new TileDictEntry(31, 21, false, "TinBar", isStatic: true),
+            new TileDictEntry(32, 23, false, "GoldOre", isStatic: true),
+            new TileDictEntry(33, 24, false, "GoldBar", isStatic: true),
+            new TileDictEntry(34, 27, false, "BronzeBar", isStatic: true),
+            new TileDictEntry(35, 30, false, "SteelBar", isStatic: true),
+            new TileDictEntry(36, 22, true, "TinNode"),
+            new TileDictEntry(37, 25, true, "GoldNode"),
+            new TileDictEntry(38, 29, true, "IronNode"),
+            new TileDictEntry(39, 31, false, "Arrow", isStatic: true)
         };
     }
 }

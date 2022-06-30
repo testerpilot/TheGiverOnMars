@@ -4,7 +4,10 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Arrow.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Black.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Blue.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Bronze/BronzeBar.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Chest.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Controls/Button.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Copper/CopperBar.png</File>
@@ -14,8 +17,12 @@
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Fonts/Font.spritefont</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Furnance.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/FurnanceDone.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Gold/GoldBar.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Gold/GoldNode.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Gold/GoldOre.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Grass.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Iron/IronBar.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Iron/IronNode.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Iron/IronOre.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/MarsGrass1.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/MarsGrass2.png</File>
@@ -23,7 +30,11 @@
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/MarsGrass4.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Pickaxe.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Player/motw.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Steel/SteelBar.png</File>
     <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/TileMainGui.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Tin/TinBar.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Tin/TinNode.png</File>
+    <File>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Tin/TinOre.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
@@ -34,8 +45,19 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File>Furnace.png</File>
     <File>FurnaceProcessing.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

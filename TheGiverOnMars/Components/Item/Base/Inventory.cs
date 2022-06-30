@@ -39,7 +39,7 @@ namespace TheGiverOnMars.Components.Item.Base
         }
 
         [JsonIgnore]
-        public Item ItemInterfaced
+        public BaseItem ItemInterfaced
         {
             get
             {

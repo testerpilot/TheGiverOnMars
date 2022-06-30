@@ -10,7 +10,7 @@ using TheGiverOnMars.Components.PlacedObject.Definitions;
 using TheGiverOnMars.Dictionaries;
 using TheGiverOnMars.Managers;
 
-namespace TheGiverOnMars.Objects
+namespace TheGiverOnMars.Components.Map
 {
     public class Map
     {
@@ -106,7 +106,7 @@ namespace TheGiverOnMars.Objects
             }
         }
 
-        public void Spawn(Item item, Vector2 position, int count = 1)
+        public void Spawn(BaseItem item, Vector2 position, int count = 1)
         {
             for (int i = 0; i < count; i++)
             {

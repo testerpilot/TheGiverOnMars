@@ -8,12 +8,19 @@ namespace TheGiverOnMars.Dictionaries
 {
     public static class ItemDictionary
     {
-        public static Dictionary<int, Item> Dictionary = new Dictionary<int, Item>()
+        public static Dictionary<string, BaseItem> Dictionary = new Dictionary<string, BaseItem>()
         {
-            { 1, new IronBar() },
-            { 2, new CopperBar() },
-            { 3, new CopperOre() },
-            { 4, new Pickaxe() }
+            { "IronOre", new IronOre() },
+            { "IronBar", new IronBar() },
+            { "CopperBar", new CopperBar() },
+            { "CopperOre", new CopperOre() },
+            { "TinOre", new TinOre() },
+            { "TinBar", new TinBar() },
+            { "GoldOre", new GoldOre() },
+            { "GoldBar", new GoldBar() },
+            { "BronzeBar", new BronzeBar() },
+            { "SteelBar", new SteelBar() },
+            { "Pickaxe", new Pickaxe() }
         };
     }
 }

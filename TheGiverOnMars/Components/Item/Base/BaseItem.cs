@@ -12,7 +12,7 @@ namespace TheGiverOnMars.Components.Item.Base
     /// <summary>
     /// Class for base item data
     /// </summary>
-    public class Item
+    public class BaseItem
     {
         public string Name { get; set; }
         public int TileId { get; set; }
@@ -23,7 +23,7 @@ namespace TheGiverOnMars.Components.Item.Base
     /// <summary>
     /// Class for item that is buyable/sellable
     /// </summary>
-    public class SellableItem : Item
+    public class SellableItem : BaseItem
     {
         public int BaseSellPrice { get; set; }
         public int BaseBuyPrice { get; set; }
@@ -32,7 +32,7 @@ namespace TheGiverOnMars.Components.Item.Base
     /// <summary>
     /// Class for item that can be used for some action (such as a key, sword, or potion)
     /// </summary>
-    public abstract class ActionItem : Item
+    public abstract class ActionItem : BaseItem
     {
         public abstract void OnUse(Player player);
     }
@@ -68,7 +68,7 @@ namespace TheGiverOnMars.Components.Item.Base
     /// </summary>
     public class ItemInstance
     {
-        public Item Item { get; set; }
+        public BaseItem Item { get; set; }
 
         private SpriteTile InventorySpritePrivate;
 
@@ -90,7 +90,7 @@ namespace TheGiverOnMars.Components.Item.Base
             }
         }
 
-        public ItemInstance(Item item)
+        public ItemInstance(BaseItem item)
         {
             Item = item;
             InventorySpritePrivate = TileManager.GetTileFromID(item.TileId).DeepCopy(isStaticTile: true);
@@ -124,7 +124,7 @@ namespace TheGiverOnMars.Components.Item.Base
             Count = count;
         }
 
-        public ItemStack(Item item, int count)
+        public ItemStack(BaseItem item, int count)
         {
             Item = new ItemInstance(item);
             Count = count;
@@ -142,7 +142,7 @@ namespace TheGiverOnMars.Components.Item.Base
         public bool IsStackable(ItemStack stack) =>
             Item.GetType() == stack.Item.GetType();
 
-        public bool IsUnstackable(Item item, int count)
+        public bool IsUnstackable(BaseItem item, int count)
         {
             if (Item.Item.GetType() == item.GetType() && count <= Count)
             {
@@ -183,7 +183,7 @@ namespace TheGiverOnMars.Components.Item.Base
             }
         }
 
-        public ItemStack Unstack(Item item, int count)
+        public ItemStack Unstack(BaseItem item, int count)
         {
             if (IsUnstackable(item, count))
             {

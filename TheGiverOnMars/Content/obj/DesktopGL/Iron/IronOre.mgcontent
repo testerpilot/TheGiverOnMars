@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/Iron/IronOre.png</SourceFile>
-  <SourceTime>2022-06-17T13:47:33.4485257-05:00</SourceTime>
+  <SourceTime>2022-06-27T17:47:29.5773381-05:00</SourceTime>
   <DestFile>C:/Users/rexxs/Documents/TheGiverOnMars/TheGiverOnMars/Content/bin/DesktopGL/Iron/IronOre.xnb</DestFile>
-  <DestTime>2022-06-25T18:02:53.1997984-05:00</DestTime>
+  <DestTime>2022-06-27T20:59:44.162939-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T11:17:54-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

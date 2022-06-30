@@ -53,6 +53,8 @@ namespace TheGiverOnMars
 
         protected override void Update(GameTime gameTime)
         {
+            Constants.GameTime = gameTime;
+
             if (Constants.NextState != null)
             {
                 Constants.CurrentState = Constants.NextState;

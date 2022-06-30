@@ -35,9 +35,9 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             player.InventoryManager.IsInventoryOpen = true;
         }
 
-        public override List<(BaseItem.Item, int)> ItemIdAndQuantityOnDrop()
+        public override List<(BaseItem.BaseItem, int)> ItemIdAndQuantityOnDrop()
         {
-            List<(BaseItem.Item, int)> tupleList = new List<(BaseItem.Item, int)>();
+            List<(BaseItem.BaseItem, int)> tupleList = new List<(BaseItem.BaseItem, int)>();
 
             // TODO: ADD CHEST OBJECT
 

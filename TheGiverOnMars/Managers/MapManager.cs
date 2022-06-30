@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using TheGiverOnMars.Components;
+using TheGiverOnMars.Components.Map;
 using TheGiverOnMars.Components.PlacedObject;
 using TheGiverOnMars.Components.PlacedObject.Definitions;
 using TheGiverOnMars.Dictionaries;
-using TheGiverOnMars.Objects;
 
 namespace TheGiverOnMars.Managers
 {

@@ -77,7 +77,7 @@ namespace TheGiverOnMars.Components.PlacedObject
 
     public class PlacedObjectWithDrop : BreakablePlacedObject
     {
-        public List<(BaseItem.Item, int)> ItemIdAndQuantity { get; set; } = new List<(BaseItem.Item, int)>();
+        public List<(BaseItem.BaseItem, int)> ItemIdAndQuantity { get; set; } = new List<(BaseItem.BaseItem, int)>();
 
         public override PlacedObject DeepCopy()
         {
@@ -128,7 +128,7 @@ namespace TheGiverOnMars.Components.PlacedObject
 
     public abstract class InteractablePlacedObjectWithDrop : BreakableInteractablePlacedObject
     {
-        public abstract List<(BaseItem.Item, int)> ItemIdAndQuantityOnDrop();
+        public abstract List<(BaseItem.BaseItem, int)> ItemIdAndQuantityOnDrop();
     }
 
     public class PlacedObjectInstance

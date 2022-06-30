@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using TheGiverOnMars.Components.Item.Base;
 using TheGiverOnMars.Components.Item.Definitions;
+using TheGiverOnMars.Components.Map;
 using TheGiverOnMars.Components.PlacedObject;
 using TheGiverOnMars.Components.PlacedObject.Definitions;
 using TheGiverOnMars.Objects;
@@ -119,7 +120,7 @@ namespace TheGiverOnMars.Dictionaries
                     new MapDictionaryEntry.MapTransitionEntry()
                     {
                         TransitionID = -1,
-                        MapTransitionTo = "test2",
+                        MapTransitionTo = "temp",
                         RenderAs = 3,
                         SpawnPoint = new Vector2(2, 2)
                     }
@@ -131,7 +132,8 @@ namespace TheGiverOnMars.Dictionaries
                         Position = new Vector2(3, 5),
                         Data = new List<InventorySpace>()
                         {
-                            new StackInventorySpace(new ItemStack(new IronOre(), 5)),
+                            new StackInventorySpace(new ItemStack(new SteelBar(), 1)),
+                            new StackInventorySpace(new ItemStack(new BronzeBar(), 1)),
                             new ItemInventorySpace(new ItemInstance(new Pickaxe())),
                             new StackInventorySpace(new ItemStack(new ChestItem(), 1)),
                             new StackInventorySpace(new ItemStack(new FurnaceItem(), 1))
@@ -152,13 +154,58 @@ namespace TheGiverOnMars.Dictionaries
                     },                    
                     new MapDictionaryEntry.PlacedObjectEntry()
                     {
-                        Position = new Vector2(10, 4),
+                        Position = new Vector2(8, 5),
                         ObjectId = 1
                     },
                     new MapDictionaryEntry.PlacedObjectEntry()
                     {
                         Position = new Vector2(8, 6),
                         ObjectId = 1
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(10, 4),
+                        ObjectId = 3
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(10, 5),
+                        ObjectId = 3
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(10, 6),
+                        ObjectId = 3
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(12, 4),
+                        ObjectId = 4
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(12, 5),
+                        ObjectId = 4
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(12, 6),
+                        ObjectId = 4
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(14, 4),
+                        ObjectId = 5
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(14, 5),
+                        ObjectId = 5
+                    },
+                    new MapDictionaryEntry.PlacedObjectEntry()
+                    {
+                        Position = new Vector2(14, 6),
+                        ObjectId = 5
                     },
                     new MapDictionaryEntry.PlacedObjectEntry()
                     {
@@ -237,7 +284,8 @@ namespace TheGiverOnMars.Dictionaries
                         SpawnPoint = new Vector2(2, 2)
                     }
                 }
-            }
+            },
+            RandomWalkMap.GenerateMap(new Point(50, 50), 2, 250)
         };
 
         public static Dictionary<string, List<int[]>> Dictionary = new Dictionary<string, List<int[]>>()

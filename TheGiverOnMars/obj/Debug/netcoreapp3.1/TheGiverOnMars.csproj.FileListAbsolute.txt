@@ -49,3 +49,14 @@ C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\C
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\FurnanceProcessing.xnb
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\FurnaceProcessing.xnb
 C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\MonoGame.Penumbra.DesktopGL.dll
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Black.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Bronze\BronzeBar.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Gold\GoldBar.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Gold\GoldNode.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Gold\GoldOre.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Iron\IronNode.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Steel\SteelBar.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Tin\TinBar.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Tin\TinNode.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Tin\TinOre.xnb
+C:\Users\rexxs\Documents\TheGiverOnMars\TheGiverOnMars\bin\Debug\netcoreapp3.1\Content\Arrow.xnb

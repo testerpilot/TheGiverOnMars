@@ -12,8 +12,6 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using TheGiverOnMars.Components;
-using TheGiverOnMars.Components.Item.Base;
-using TheGiverOnMars.Components.Item.Definitions;
 using TheGiverOnMars.Managers;
 using TheGiverOnMars.Objects;
 using static TheGiverOnMars.Components.InputWrapper;
@@ -85,16 +83,20 @@ namespace TheGiverOnMars.States
 
             Constants.Input = new InputWrapper()
             {
-                Up = new KeyWrapper(Keys.Up),
-                Down = new KeyWrapper(Keys.Down),
-                Left = new KeyWrapper(Keys.Left),
-                Right = new KeyWrapper(Keys.Right),
-                ToggleInventory = new KeyWrapper(Keys.Tab),
-                ShiftLeftInventory = new KeyWrapper(Keys.Q),
-                ShiftRightInventory = new KeyWrapper(Keys.E),
-                Interact = new KeyWrapper(Keys.C),
-                Use = new KeyWrapper(Keys.V),
-                Save = new KeyWrapper(Keys.Z)
+                DirectionalControls = new DirectionalControlsWrapper()
+                {
+                    Up = new KeyWrapper(Keys.Up, Buttons.DPadUp),
+                    Down = new KeyWrapper(Keys.Down, Buttons.DPadDown),
+                    Left = new KeyWrapper(Keys.Left, Buttons.DPadLeft),
+                    Right = new KeyWrapper(Keys.Right, Buttons.DPadRight)
+                },
+                ToggleInventory = new KeyWrapper(Keys.Tab, Buttons.Y),
+                ToggleCrafting = new KeyWrapper(Keys.R, Buttons.B),
+                ShiftLeftInventory = new KeyWrapper(Keys.Q, Buttons.LeftShoulder),
+                ShiftRightInventory = new KeyWrapper(Keys.E, Buttons.RightShoulder),
+                Interact = new KeyWrapper(Keys.C, Buttons.X),
+                Use = new KeyWrapper(Keys.V, Buttons.A),
+                Save = new KeyWrapper(Keys.Z, Buttons.Start)
             };
 
             if (save != null)
@@ -160,6 +162,8 @@ namespace TheGiverOnMars.States
             Constants.Penumbra.Update(gameTime);
 
             Constants.NewKeyState = Keyboard.GetState();
+            Constants.NewGamePadState = GamePad.GetState(PlayerIndex.One);
+            Constants.StickButtonState = Constants.Input.DirectionalControls.InputIsJustPressed();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Constants.Game.Exit();
@@ -176,6 +180,7 @@ namespace TheGiverOnMars.States
             Constants.SceneManager.Update(gameTime, Constants.SpriteBatch, _player.Tile.Position);
 
             Constants.CurrKeyState = Constants.NewKeyState;
+            Constants.CurrGamePadState = Constants.NewGamePadState;
         }
     }
 }

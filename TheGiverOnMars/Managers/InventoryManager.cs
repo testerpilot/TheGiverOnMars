@@ -66,10 +66,14 @@ namespace TheGiverOnMars.Managers
         public const int GuiOffset = (10 * 68) / 2;
         public float PlayerOffsetX, PlayerOffsetY;
 
+        public CraftingManager CraftingManager;
+
         public InventoryManager(Inventory inventory, Tile playerTile)
         {
             Inventory = inventory;
             PlayerTile = playerTile;
+
+            CraftingManager = new CraftingManager(playerTile, inventory);
 
             SetupInventoryTiles(TileManager.GetTileFromID(20));
         }
@@ -89,7 +93,7 @@ namespace TheGiverOnMars.Managers
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (IsInventoryOpen)
+            if (IsInventoryOpen || CraftingManager.Toggled)
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -97,7 +101,7 @@ namespace TheGiverOnMars.Managers
                     {
                         var tilePos = new Vector2(PlayerOffsetX + (i * 68) - GuiOffset, PlayerOffsetY - (68 * j));
 
-                        if (i + (10 * j) == SelectedTile && !IsSelectedTileInOtherInv)
+                        if (i + (10 * j) == SelectedTile && !IsSelectedTileInOtherInv && !CraftingManager.Toggled)
                         {
                             TilesOnMainGui[i + (10 * j)].Draw(spriteBatch, tilePos, ColorSelectedTile);
                         }
@@ -200,28 +204,28 @@ namespace TheGiverOnMars.Managers
             }
             else
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    if (i == SelectedTile)
+                    for (int i = 0; i < 10; i++)
                     {
-                        TilesOnMainGui[i].Draw(spriteBatch, ColorSelectedTile);
-                    }
-                    else
-                    {
-                        TilesOnMainGui[i].Draw(spriteBatch, ColorTilesOnMainGui);
-                    }
-
-                    if (Inventory.Spaces[i].HasValue)
-                    {
-                        Inventory.Spaces[i].SpriteTile.Draw(spriteBatch, Color.White);
-                        
-                        if (Inventory.Spaces[i].GetType() == typeof(StackInventorySpace))
+                        if (i == SelectedTile)
                         {
-                            var stackInvSpace = (StackInventorySpace) Inventory.Spaces[i];
-                            spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(TilesOnMainGui[i].Position.X + 45, TilesOnMainGui[i].Position.Y + 48), Color.Black);
+                            TilesOnMainGui[i].Draw(spriteBatch, ColorSelectedTile);
+                        }
+                        else
+                        {
+                            TilesOnMainGui[i].Draw(spriteBatch, ColorTilesOnMainGui);
+                        }
+
+                        if (Inventory.Spaces[i].HasValue)
+                        {
+                            Inventory.Spaces[i].SpriteTile.Draw(spriteBatch, Color.White);
+
+                            if (Inventory.Spaces[i].GetType() == typeof(StackInventorySpace))
+                            {
+                                var stackInvSpace = (StackInventorySpace)Inventory.Spaces[i];
+                                spriteBatch.DrawString(Constants.InventoryStackFont, stackInvSpace.ItemStack.Count.ToString(), new Vector2(TilesOnMainGui[i].Position.X + 45, TilesOnMainGui[i].Position.Y + 48), Color.Black);
+                            }
                         }
                     }
-                }
             }
 
             if (IsOnPlaceableItem)
@@ -241,6 +245,8 @@ namespace TheGiverOnMars.Managers
 
                 TemporaryPlacedObjectInstance.Tile.Draw(spriteBatch, color * 0.6f);
             }
+
+            CraftingManager.Draw(gameTime, spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
@@ -298,7 +304,7 @@ namespace TheGiverOnMars.Managers
             }
             else if (IsInventoryOpen)
             {
-                if (Constants.Input.Up.IsJustPressed())
+                if (Constants.Input.DirectionalControls.Up.IsJustPressed() || Constants.StickButtonState.Up)
                 {
                     if (SelectedTile < 20)
                     {
@@ -314,7 +320,7 @@ namespace TheGiverOnMars.Managers
                         }
                     }
                 }
-                else if (Constants.Input.Down.IsJustPressed())
+                if (Constants.Input.DirectionalControls.Down.IsJustPressed() || Constants.StickButtonState.Down)
                 {
                     if (SelectedTile >= 10)
                     {
@@ -330,7 +336,7 @@ namespace TheGiverOnMars.Managers
                         }
                     }
                 }
-                else if (Constants.Input.Left.IsJustPressed() || Constants.Input.ShiftLeftInventory.IsJustPressed())
+                if (Constants.Input.DirectionalControls.Left.IsJustPressed() || Constants.StickButtonState.Left || Constants.Input.ShiftLeftInventory.IsJustPressed())
                 {
                     var mod = SelectedTile % 10;
 
@@ -343,7 +349,7 @@ namespace TheGiverOnMars.Managers
                         SelectedTile += 9;
                     }
                 }
-                else if (Constants.Input.Right.IsJustPressed() || Constants.Input.ShiftRightInventory.IsJustPressed())
+                if (Constants.Input.DirectionalControls.Right.IsJustPressed() || Constants.StickButtonState.Right || Constants.Input.ShiftRightInventory.IsJustPressed())
                 {
                     var mod = SelectedTile % 10;
 
@@ -474,6 +480,8 @@ namespace TheGiverOnMars.Managers
                 TemporaryPlacedObjectInstance = null;
             }
 
+            CraftingManager.Update(gameTime);
+
             // Open and close Inventory GUI
             if (!BlockOpen && Constants.Input.ToggleInventory.IsJustPressed())
             {
@@ -486,6 +494,19 @@ namespace TheGiverOnMars.Managers
                 }
 
                 IsInventoryOpen = !IsInventoryOpen;
+            }
+
+            if (CraftingManager.Toggled)
+            {
+                if (IsInventoryOpen)
+                {
+                    InventoryInteractingWith = null;
+                    SelectedTileForMove = null;
+                    IsSelectedTileForMoveInOtherInv = null;
+                    IsSelectedTileInOtherInv = false;
+                }
+
+                IsInventoryOpen = false;
             }
         }
     }

@@ -8,10 +8,9 @@ using System.Collections.Generic;
 using System.Text;
 using TheGiverOnMars.Components;
 using TheGiverOnMars.Components.Item.Base;
+using TheGiverOnMars.Components.Map;
 using TheGiverOnMars.Components.PlacedObject;
-using TheGiverOnMars.Dictionaries;
 using TheGiverOnMars.Managers;
-using TheGiverOnMars.Utilities;
 
 namespace TheGiverOnMars.Objects
 {
@@ -42,6 +41,7 @@ namespace TheGiverOnMars.Objects
             MapManager.CurrentMap.CollisionRects.Add(Tile);
 
             InventoryManager = new InventoryManager(new Inventory(), Tile);
+
             AnimatedSprite = new AnimatedSprite(spriteSheet);
             AnimatedSprite.Play(CurrentAnimation);
         }
@@ -79,6 +79,7 @@ namespace TheGiverOnMars.Objects
             CheckDroppedItems();
 
             if (!InventoryManager.IsInventoryOpen && 
+                !InventoryManager.CraftingManager.Toggled &&
                 Constants.Input.Use.IsJustPressed())
             {
                 if (InventoryManager.IsOnPlaceableItem && !InventoryManager.PlaceObjectBlocked)
@@ -149,7 +150,8 @@ namespace TheGiverOnMars.Objects
 
         private void Move(GameTime gameTime)
         {
-            if (!InventoryManager.IsInventoryOpen)
+            if (!InventoryManager.IsInventoryOpen && 
+                !InventoryManager.CraftingManager.Toggled)
             {
                 var deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 var walkSpeed = deltaSeconds * 128;
@@ -162,28 +164,28 @@ namespace TheGiverOnMars.Objects
                     CurrentAnimation = CurrentAnimation.Replace("walk", "idle");
                 }
 
-                if (Constants.Input.Left.IsDown())
+                if (Constants.Input.DirectionalControls.InputLeftIsDown())
                 {
                     Tile.Velocity.X = -Tile.Speed;
                     CurrentAnimation = "walkWest";
                     CurrentDirection = Direction.W;
                 }
 
-                else if (Constants.Input.Right.IsDown())
+                else if (Constants.Input.DirectionalControls.InputRightIsDown())
                 {
                     Tile.Velocity.X = Tile.Speed;
                     CurrentAnimation = "walkEast";
                     CurrentDirection = Direction.E;
                 }
 
-                if (Constants.Input.Up.IsDown())
+                if (Constants.Input.DirectionalControls.InputUpIsDown())
                 {
                     Tile.Velocity.Y = -Tile.Speed;
                     CurrentAnimation = "walkNorth";
                     CurrentDirection = Direction.N;
                 }
 
-                else if (Constants.Input.Down.IsDown())
+                else if (Constants.Input.DirectionalControls.InputDownIsDown())
                 {
                     Tile.Velocity.Y = Tile.Speed;
                     CurrentAnimation = "walkSouth";

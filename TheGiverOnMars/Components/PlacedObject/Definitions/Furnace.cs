@@ -34,7 +34,49 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
                     Quantity = 1
                 },
                 SecondsToFulfill = 10
-            }
+            },
+            new TimedSimpleContract()
+            {
+                Requirement = new ContractElement()
+                {
+                    Item = new Items.IronOre(),
+                    Quantity = 3
+                },
+                Promise = new ContractElement()
+                {
+                    Item = new Items.IronBar(),
+                    Quantity = 1
+                },
+                SecondsToFulfill = 10
+            },
+            new TimedSimpleContract()
+            {
+                Requirement = new ContractElement()
+                {
+                    Item = new Items.GoldOre(),
+                    Quantity = 3
+                },
+                Promise = new ContractElement()
+                {
+                    Item = new Items.GoldBar(),
+                    Quantity = 1
+                },
+                SecondsToFulfill = 10
+            },
+            new TimedSimpleContract()
+            {
+                Requirement = new ContractElement()
+                {
+                    Item = new Items.TinOre(),
+                    Quantity = 3
+                },
+                Promise = new ContractElement()
+                {
+                    Item = new Items.TinBar(),
+                    Quantity = 1
+                },
+                SecondsToFulfill = 10
+            },
         };
 
         public int Health_ { get; set; } = 4;
@@ -138,9 +180,9 @@ namespace TheGiverOnMars.Components.PlacedObject.Definitions
             }
         }
 
-        public override List<(Item.Base.Item, int)> ItemIdAndQuantityOnDrop()
+        public override List<(Item.Base.BaseItem, int)> ItemIdAndQuantityOnDrop()
         {
-            var list = new List<(Item.Base.Item, int)>();
+            var list = new List<(Item.Base.BaseItem, int)>();
 
             if (CurrentContract != null)
             {
